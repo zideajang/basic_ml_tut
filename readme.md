@@ -25,64 +25,52 @@ $$ newValue = \frac{oldValue - u}{s}$$
 - 把所有的数据切分为 10 份，如果有 100 样本切分每个数据集有 10 个样本
 
 $$ E = \frac{1}{10} \sum_{i=1}^{10} E_i $$
-## 决策树算法
-### 决策树的概率
-### 决策树的算法
-#### 纯度计算公式
-#### 从 ID3 到 C4.5
-#### 问题
-```python
-1. 1 1 => 1
-2. 1 2 => 1
-3. 0 0 => 0
-4. 0 0 => 0
-5. 1 1 => 1
-6. 0 0 => 0
-7. 1 2 => 1
-8. 1 1 => 1
-9. 0 2 => 0
-10. 1 0 => 0
 
-```
+## 拟合
+![拟合](https://upload-images.jianshu.io/upload_images/8207483-75dea78d54022e22.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-- 熵概念: 信息熵是用来描述信息的混乱程度或者信息的不确定度。信息熵是可以反映集合的纯度
-- 算法目的通过不断决策树来将信息熵降低下来
-- 信息熵 $$ Ent(D) = \sum_{k=1}^m p_k \log_2 \frac{1}{p_k} = - \sum_{k=1}^m p_k \log_2 p_k$$
-$$ p_1 = \frac{1}{2}, p_2 = \frac{1}{2}$$
-$$ - ( \frac{1}{2} \log_2 \frac{1}{2} +  \frac{1}{2} \log_2 \frac{1}{2}) = 1$$
-- 信息增益 $$ Gain(D,C) = Ent(D) - Ent(D|C) = Ent(D) - \sum_{i=1}^n \frac{N(D_i)}{N} Ent(D_i) $$
+- 欠拟合(Underfitting)
+- 正确拟合(good fitting)
+- 过拟合(overfitting)
 
-- 信息增益率
-$$ Gain(D,C) = Ent(D) - Ent(D|C) = Ent(D) - \sum_{i=1}^n \frac{N(D_i)}{N} Ent(D_i) $$
-划分条件为待遇
-$$ Ent(D_1) = - (\frac{5}{6} \log \frac{5}{6} + \frac{1}{6} \log \frac{1}{6} ) \approx 0.65$$
+![分类问题拟合](https://upload-images.jianshu.io/upload_images/8207483-3fe71dd2041b94e8.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-$$ Ent(D_2) = 1 * \log_2^1 + 0 * \log_2^0 = 0 $$
+这两个点可能是噪声数据，分类边界比较复杂，依旧在训练集表现优秀而在测试集就会发现错误率就高于训练集的错误率。
 
-$$ 1 - (\frac{6}{10} * 0.65 + \frac{4}{10} * 0) = 0.61 $$
-表示划分后信息熵为，信息增益越大越好，使用信息熵天生对多路分类进行偏好
-- 信息增益率
-$$ Gain_ratio(D,C) = \frac{Gain(D,C)}{Ent(C)} $$
+### 防止过拟合
+本质原因就是选择了复杂模型来处理简单问题
+- 较少样本的特征
+- 增加数据量，一般情况增加数据量会提升训练的效果
+- 正则化(Regularized)
+![optimal_capacity.png](https://upload-images.jianshu.io/upload_images/8207483-ace52e8f287b78df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-$$ Ent(C) = - \sum_{i=1}^k \frac{N(D_i)}{N} \log_2 \frac{N(D_i)}{N} $$
+### 模型容量
+我们模型容量过小
+- 奥卡姆剃刀定律
+### 正则化方法
+- 数据，提高数据质量和数量，人工数据合成，在训练数据加入造成。
+- 模型
+- 优化，设计抵抗过拟合优化方法
 
-对于多路划分乘以代价
-$$ Gain(D C_1) = 0.61, Gain(D C_2) = 0.72$$
-$$ Ent(C_1) = - (\frac{6}{10} \log \frac{6}{10} + \frac{4}{10} \log \frac{4}{10}) = = 0.971$$
-$$ Ent(C_2) = 1.571$$
+### 正则化损失函数
+正则化用于防止过拟合，就是直接修改成本函数
+也就是我们不仅关注局部而且还要关注全局。
+就是我们损失函数添加一个，通过$\lambda$来调节正则化的重要性。就是把所有参数$\theta$ 进行累加。
+- L2 正则化
+限制参数范围（参数接近零）
+$$ J(\theta) = \frac{1}{2m} \left[ \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j=1}^n \theta_j^2 \right]$$
+- L1 正则化
+稀疏参数空间(少量非零参数)
+$$ J(\theta) = \frac{1}{2m} \left[ \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j=1}^n |\theta_j| \right]$$
 
-$$ Gain_ratio = 0.63  $$
+### 将模型容量
+- 参数共享，例如卷积神经网络，其实背后是有生物学的依据
+- 系综方法，例如 dropout 可以达到降低模型容量
+- 多任务学习
+- Batch Normalization
+- 非监督/半监督学习
+- 生成式对抗网络 
 
-#### CART 算法
-CART 即分类与回归树(Classfication And Regression Tree) CART 算法与 ID3 算法思路是相似的，但是在具体实现和场景上略有不同。
-- CART 不仅可以处理分类问题还可以处理连续问题
-- CART 算法采用基尼指数(分类树)以及方差（会归树）作为纯度的度量，而 ID3 系列算法采用信息熵作为纯度
-- CART 算法只能二叉树
-##### 分类树
-$$ Gini(D) = \sum_{k=1}^m p_k(1 - p_k) = 1 - \sum_{k=1}^m p_k^2$$
-
-$$ \Delta Gini = Gini(D) -   \sum_{i=1}^2 \frac{N(D_i)}{N} Gini(D_i)$$
-##### 会归树
 
 ## 聚类算法
 ### 聚类算法 K-Means 算法

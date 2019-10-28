@@ -14,7 +14,9 @@
 SVM = Hinge Loss + (核方法)Kernel Method
 
 ### 概念 SVM (Support Vector Machine)
-SVM 是我们必须掌握统计算法，而且 SVM 推导过程要比其应用更加重要。使用 SVM 前提是我们分类问题是线性可分的。
+SVM 是我们必须掌握统计算法，而且 SVM 推导过程要比其应用更加重要。使用 SVM 前提是我们分类问题是线性可分的。SVM 既可以解决分类问题也可以解决回归问题。
+
+将 SVM(支持向量机)思想转换为最优化的问题。
 
 SVM 用于解决分问题的分类器。介绍且背后算法，了解算法后便于我们更好调整参数。在深度学习出现之前被大家广泛应用用于分类算法。
 ![svm](https://upload-images.jianshu.io/upload_images/8207483-4d939008a9e07a26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -37,8 +39,43 @@ SVM 用于解决分问题的分类器。介绍且背后算法，了解算法后�
 就是我们要找的决策分界线到离其最近点的边距最大。这就是 SVM 的几何含义。那么有了这个想法我们就需要用数学来描述我们的想法，这也就是找模型的过程。
 - 决策
 ![support-vector-machine-and-implementation-using-weka-19-638.jpg](https://upload-images.jianshu.io/upload_images/8207483-98fbf8be1a4a64e2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+我们绘制 $\vec{w}$ 垂直于我们决策边界的向量，然后计算一点 $\vec{u}$ 向量到  $\vec{w}$ 上的投影，如果投影值大于一个常数值就说明是正样本否则就是负样本。
+$$ \vec{w} \cdot \vec{u} \ge C then u \in + $$
+$$ \vec{w} \cdot \vec{u} - b \ge 0 then u \in + $$
+### 训练数据
+我们在构建训练数据集时候，需要将所有正样本设计为计算后大于 1
+$$ \vec{W} \cdot \vec{X_+} + b \ge 1$$
+$$ \vec{W} \cdot \vec{X_-} + b \le -1$$
+这就是 SVM 的最大间隔假设。
+### 小技巧
+我们通过一些小技巧将上面两个公式合并为一个公式
+$$ y_i(\vec{w}x_+ \cdot \vec{u} + b) \ge 1$$
+$$ y_i(\vec{w}x_- \cdot \vec{u} + b) \ge 1$$
+$$ y_i(\vec{w}x \cdot \vec{u} + b) \ge 1$$
+约束条件在训练集中所有样本都需要满足这个公式
+对于支持向量的点在上面公式不等号变为等号
+$$ y_i(\vec{w}x \cdot \vec{u} + b) = 1$$
+### 求取宽度
+$$ width = (\vec{x_+} -\vec{x_-}) \cdot \frac{\vec{W}}{||w||} $$
 
-$$ $$
+$$ width = (\vec{x_+} -\vec{x_-}) \cdot \frac{\vec{W}}{||w||} = \frac{\vec{x_+} \cdot \vec{w}}{||w||} - \frac{\vec{x_-} \cdot \vec{w}}{||w||}$$
+$$ width = \frac{1-b}{||w||} + \frac{1+b}{||w||} = \frac{2}{||w||}$$
+$$ y_i(\vec{w}x \cdot \vec{u} + b) = 1$$
+那么我们让街宽最大就是让 $\frac{2}{||w||}$ 大，那么也就是问题变为了$\max \frac{2}{||w||}$
+我们将问题进行一系列转换那么求 $\max \frac{2}{||w||}$ 转换为了 $ \min \frac{1}{2} ||w||^2$
+
+$$ L = \frac{1}{2} ||\vec{w}||^2 - \sum \alpha_i (y_i(\vec{w} \cdot \vec{x} + b ) - 1)  $$
+
+$$ \frac{\partial L}{\partial \vec{w}} = \vec{w} - \sum \alpha_i \cdot y_i \cdot x_i = 0 $$
+$$  \vec{w} = \sum \alpha_i \cdot y_i \cdot x_i  $$
+
+$$ \frac{\partial L}{\partial b} = \sum \alpha_i y_i  = 0 $$
+然后将 $  \vec{w} = \sum \alpha_i \cdot y_i \cdot x_i  $ 公式带入下面公式中进行推导
+$$ L = \frac{1}{2} ||\vec{w}||^2 - \sum \alpha_i (y_i(\vec{w} \cdot \vec{x} + b ) - 1)  $$
+
+$$ L = \frac{1}{2}  \sum \alpha_i \cdot y_i \cdot x_i \vec{w}  \sum \alpha_i \cdot y_i \cdot x_i - \sum \alpha_i y_i x_i \cdot (\sum \alpha_i y_i x_i )- \sum \alpha_i y_i b + \sum \alpha_i $$
+$$ = \sum\alpha_i - \frac{1}{2} \sum \sum \alpha_i y_i x_i \alpha_j y_j x_j$$
+
 ### Hinge Loss
 1. 找到函数模型集合
 这里我们依旧是进行二分类问题，我们在训练集样本 $\{ x^1 x^2 \cdots x^i \}$ 对于标签为 $\{ \hat{y}^1 \hat{y}^2 \cdots \hat{y}^n \}$ 这里用-1 和 1 表示结果。
@@ -64,8 +101,56 @@ $$ if  \hat{y}^n = -1 , f(x) close to -1 $$
 $$ l(f(x^n),\hat{y}^n) = (\hat{y}^nf(x^n) - 1)^2$$
 
 
+### SVM 推导
+$$ f(x) = W^Tx + b $$
+根概率没有关系，
+$$ f(w) = sign(w^Tx + b) $$
+- 几何含义
+就是我们要找的决策分界线到离其最近点的边距最大。这就是 SVM 的几何含义。那么有了这个想法我们就需要用数学来描述我们的想法，这也就是找模型的过程。我们不仅关注训练误差更关注于期望误差。例如这个线对噪声非常敏感，泛化能力不高。
+### SVM 分类
+- 硬间隔 SVM: 最大就是间隔期(max margin W b)
+- 软间隔 SVM
+- 核 SVM
 
+#### 硬间隔 SVM
+接下来我们做的工作就是用形式语言(数学语言)来翻译这句话**最大化间距**
+- 假设 $\{ (x_i,y_i)\}^N_{i=1} $ 其中 $ x_i \in \mathbb{R} ,y \in \{-1,1\}$
 
+$$ st. \begin{cases}
+    w^Tx_i + b > 0 & y_i = 1 \\
+    w^Tx_i + b < 0 & y_i = -1 
+\end{cases} $$
+等价于下面等式，因为$y_i$ 和 
+$$ y_i(w^Tx_i + b) > 0$$
+现在我们就用数学语言将最大分类器进行说明。
+所谓 margin 就是距离分割平面最小距离的点为 margin，最小 min 距离
+$$ margin(w,b) = \min_{w,b,x_i} distance(w,b,x_i)$$
+
+$(x_i,y_i)$点到直线 $w^Tx + b$ 的距离公式如下 
+
+$$ distance = \frac{1}{||w||} |w^Tx_i + b| $$
+$$ margin(w,b) = \min_{w,b,x_i,i \in (1 \rightarrow N)} \frac{1}{||w||} |w^Tx_i + b|$$
+
+然后我们将 distance 带入到公式，还需要满足 $y_i(w^Tx_i + b) > 0$ 条件
+$$ \begin{cases}
+    \max_{w,b} \min_{x_i} \frac{1}{||w||} |w^Tx_i + b| \\
+    s.t. y_i(w^Tx_i + b) > 0
+\end{cases} $$
+
+因为$y_i(w^Tx_i + b)$ 是大于 0 而且 $y_i$ 取值为 1 ，所以可以将其带入上面公式来脱掉绝对值。
+$$ \begin{cases}
+    \max_{w,b} \min_{x_i} \frac{1}{||w||} y_i(w^Tx_i + b) \\
+    s.t. y_i(w^Tx_i + b) > 0
+\end{cases} $$
+
+$$ max_{w,b} \frac{1}{||w||} min_{x_i} y_i(w^Tx_i + b) $$
+我们假设有一个大于 0 的 $\gamma$ 等于该方程
+$$ s.t. y_i(w^Tx_i + b) >0 \Rightarrow \exists \gamma>0, min_{x_i} y_i(w^Tx_i + b) = \gamma $$
+
+$$ \Rightarrow \begin{cases} max_{w,b} \frac{1}{||w||} \\ min y_i(w^Tx_i + b) =1 \end{cases} \Rightarrow \begin{cases}
+    min \frac{1}{2} w^Tw \\
+    s.t. y_i(w^Tx_i + b) \ge 1
+\end{cases} $$
 #### 参数分析
 - c 用来调整松弛变量系数
 - kernel 核函数用进行判别类别的函数 例如 rbf
@@ -87,7 +172,47 @@ $$ l(f(x^n),\hat{y}^n) = (\hat{y}^nf(x^n) - 1)^2$$
     - 支持向量与我们直线最近那些点(向量)就是支持向量
 
 - 回忆解析几何，点到直线的距离
-- $$ (x,y) $$
+
+- 点 $ (x,y)$ 到 $Ax + By + C = 0$ 的距离 
+$$\frac{|Ax + By + C|}{\sqrt{A^2 + B^2}} $$
+
+- 扩展到 n 维空间 $\theta^Tx_b = 0 \Rightarrow w^T + b = 0$
+
+$$ \frac{|w^T + b|}{||w||} ||w|| = \sqrt{w_1^2 + w_2^2 \cdots w_i^2}$$
+我们了解到了如何在 n 维空间进行求解点到线或平面的距离后，我么知道所有点到平面的距离都应该大于支持向量到平面距离，然后接下来我们再尝试用数学方式把这些思想表达出来。 
+
+这里对于分类问题使用 1 和 -1 表示两类事物，而非 0 和 1。
+$$ \begin{cases}
+    \frac{w^Tx^{(i)} + b}{||w||} \ge d & \forall y^{(i)} = 1 \\
+    \frac{w^Tx^{(i)} + b}{||w||} \le -d & \forall y^{(i)} = -1
+\end{cases}$$
+通过公式不难看出对于任意样本点 $y^i = 1$ 都满足 $\frac{w^Tx^{(i)} + b}{||w||} \ge d$
+对等式两边分别除以 d 就得到下面不等式
+$$ \begin{cases}
+    \frac{w^Tx^{(i)} + b}{||w||d} \ge  & \forall y^{(i)} = 1 \\
+    \frac{w^Tx^{(i)} + b}{||w||d} \le -1 & \forall y^{(i)} = -1
+\end{cases}$$
+
+这里 $||w||$ 是 n 维的向量的模是一个数字，d 也是数，我们可以对 w 和截距 b 同时除以一个数。转换成下面方程
+$$ \begin{cases}
+    w^T_dx^{(i)} + b_d \ge 1 & \forall y^{(i)} = 1 \\
+    w^T_dx^{(i)} + b_d \le -1 & \forall y^{(i)} = -1
+\end{cases}$$
+
+那么我们这里方程中有两个未知数 $W_d$ 和 $b_d$ 需要我们求解，这样我们就可以使用 w 和 d 直接进行替换。但是现在使用 w 和 d 和之前 w 和 d 差一个系数关系。
+
+我们在进一步进行推导出，这样我们将两个不等式合并表示为一个不等式。也就是说明我们所有点都要满足这个不等式关系。
+$$ y^{(i)}(w^Tx^{(i)} + b) \ge 1$$
+
+
+推导到现在我们发现决策边界线可以表达为 $$ W_d^T + b = 0 $$
+而其上下两侧的支持向量的直线可以用 $ W_d^T + b = 1 $ 和 $ W_d^T + b = -1 $
+对于任意支撑支持向量
+$$ \max \frac{|w^Tx+b|}{||w||} \Rightarrow \max \frac{1}{||w||} \Rightarrow \min ||w|| \Rightarrow \min \frac{1}{2} ||w|| ^2$$
+经过一些列推导我们得到最小值，求取最小值也就是我们问题变为可以优化的问题。不过这一切是建立在满足以下不等式基础上
+$$s.t.  y^{(i)}(w^Tx_i + b) \ge 1$$
+之前我们讨论最优化条件都是，
+
 
 $$  f(x) = W^Tx + b $$
 $$ V^i = \frac{W^T}{||W||} x^i + \frac{b}{||W||}$$
