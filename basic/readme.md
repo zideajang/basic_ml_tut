@@ -45,8 +45,26 @@ $$P(\vec{Y},\vec{X} | \theta) $$
 我们之前学习回归函数$h_{\theta}(\theta^Tx)$ 样子想必大家已经都熟悉了吧。$g(x) = \frac{1}{1+e^{-x}}$
 我们把$h_{\theta}$作为变量带入g(x) 中就得到今天逻辑回归的模型
 $$ h_{\theta} = \frac{1}{1 + e^{- \theta^TX }} $$
+我们之前学习回归函数$h_{\theta}(\theta^Tx)$ 样子想必大家已经都熟悉了吧。$g(x) = \frac{1}{1+e^{-x}}$
+我们把$h_{\theta}$作为变量带入g(x) 中就得到今天逻辑回归的模型
+$$ h_{\theta} = \frac{1}{1 + e^{- \theta^TX }} $$
 
-我们知道
+我们已经知道逻辑回归是用来做分类的，一般分为 2 个 类别，我们将 0.5 作为分类边界。sigmoid 函数特点就是 0 到 1 我们就可以小于 0.5 归为一个类别。
+- 当$z\ge0$ 时候$g(z) \ge 0.5$ $z\ge0$ 也就是 $\theta^TX \ge 0$ 所以这时$g(\theta^TX) \ge 0.5$
+- 当$z\le0$ 时候$g(z) \ge 0.5$ $z\le0$ 也就是 $\theta^TX \ge 0$ 所以这时$g(\theta^TX) \le 0.5$
+
+### 决策边界
+$$ h_{\theta}(x) = g(\theta_0 + \theta_1x_1 + \theta_2x_2 + \theta_3x_2^2 + \theta_4x_2^2  ) $$
+
+### 损失函数
+
+$$ J(h_{\theta}(x),y) = \begin{cases}
+  -\log(h_{\theta}(x)) & y = 1 \\
+  -\log(1 - h_{\theta}(x)) & y = 0
+\end{cases} $$
+
+$h_{\theta}(x)$接近于 1 时候**损失函数**就为 0
+我们是无法对
 
 $$
 \begin{cases}
