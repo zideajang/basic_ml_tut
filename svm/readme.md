@@ -214,6 +214,20 @@ $$s.t.  y^{(i)}(w^Tx_i + b) \ge 1$$
 之前我们讨论最优化条件都是，
 
 
+## 软间隔(soft margin)
+我们在之前推导硬间隔(hard margin)
+$$ \min \frac{1}{2} ||w||$$
+$$ s.t. y^{(i)}(W^Tx^{(i)} + b) \ge 1$$
+
+由于一些误差点或者是线性不可分情况,这时候我们需要设计一个具有容错能力 SVM 就可以解决这个问题。
+
+$$ \min \frac{1}{2} ||w|| $$
+$$ s.t. y^{(i)}(W^Tx^{(i)} + b) \ge 1$$
+我们知道下面约束就会保证任一点都在直线大于 1 或 -1 以外的空间。
+$$ s.t. y^{(i)}(W^Tx^{(i)} + b) \ge 1 - \zeta_i$$
+![soft-margin](https://upload-images.jianshu.io/upload_images/8207483-a0c4f53c23d7c137.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+$$ s.t. y^{(i)}(W^Tx^{(i)} + b) \ge 1 - \zeta_i$$
+$$ \zeta \ge 0 $$
 $$  f(x) = W^Tx + b $$
 $$ V^i = \frac{W^T}{||W||} x^i + \frac{b}{||W||}$$
 $$ V^i = \frac{W^T}{||W||} x^i + \frac{b}{||W||}$$
