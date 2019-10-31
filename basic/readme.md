@@ -6,7 +6,63 @@
 ### 多元线性回归模型
 $$h(\theta_1,theta_2, \cdots \theta_m) = \theta_0 + \theta_1x_1  \theta_2x_2 + \cdots \theta_mx_m$$
 之前我们了解到了多元线性回归是用线性的关系来拟合一个事情的发生规律,找到这个规律的表达公式,将得到的数据带入公式以用来实现预测的目的,我们习惯将这类预测未来的问题称作回归问题.机器学习中按照目的不同可以分为两大类:回归和分类.今天我们一起讨论的逻辑回归就可以用来完成分类任务.
-### 逻辑回归
+$$ g(x) = \frac{1}{1 + e^{-x}} $$
+
+sigmoid
+
+$$ h_{\theta}(x) = \frac{1}{1 + e^{-\theta^TX}} $$
+
+$$ h_{\theta}(x) = \theta_0 + \theta_1 x$$
+
+$h$ 表示函数 $\theta_0$ 表示截距(以后叫偏移值) $\theta_1$ 表示斜率（以后叫权重)
+
+$$ h_{\theta}(x) = \theta_0 + \theta_1x_1 + \theta_2x_2 + \cdots + \theta_n x_n$$ 
+
+
+多元线性回归
+$$ h_{\theta} = \theta^Tx= \theta_0x_0 + \theta_1x_1 + \theta_2x_2 + \cdots + \theta_n x_n$$
+这里解释一下参数其中 $\theta_0,\theta_1 \dots \theta_n $ 这里$\theta^T$是向量转置，也就是行列变换，有 n 行 1 列向量变换为 1 行 n 列。
+接下里看一下他的损失函数，没有什么不同就是在一元线性回归基础
+$$ J(\theta_0,\theta_1 \dots \theta_n) = \frac{1}{2m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)})^2$$
+接下来就是我们通过梯度下降法来优化我们参数来达到损失函数最小值
+$$ \theta_j := \theta_j - \eta \frac{\partial}{\partial \theta_j} J(\theta_0,\theta_1 \dots \theta_n)$$
+分类准确率
+最大似然估计法(maxiumu likelihood)
+**似然性**就是概率，也就是我们假设的使我们数据最大，也就是在这个假设下数据出现的最大。
+
+$$P(D|\theta)$$
+$$P((x_1,y_1),(x_2,y_1),\dots,(x_n,y_n)|\theta)$$
+联合分布也就是所有数据出现的可能形式
+$$P((x_1,x_2,\dots,x_n),(y_1,y_2,\dots,y_n)|\theta) $$
+$$P(\vec{Y},\vec{X} | \theta) $$
+### 离散型随机变量
+设总体 $X$ 是离散型随机变量，概率分布为 $P\{ X = t_i \} = p(t_i;\theta),i = 1,2, \dots$ 其中 $\theta \in \Phi$ 为带估计参数。
+设$X_1,X_2, \dots ,X_n$ 是来自总体样本 X 的样本，$x_1,x_2, \dots,x_n$ 是样本值，成函数$ L(\theta) = L(x_1,x_2, \cdots , x_n;\theta) = \prod_{i=1}^n p(x_i;\theta) $ 为样本 $x_1,x_2, \dots x_n$ 的似然函数，如果$\theta \in \Phi$ 使得 $L(\hat{\theta}) = \max_{\hat{\theta} \in \Phi} L(\theta)$ 这样 $\hat{\theta}$ 与 $x_1,x_2, \dots,x_n$  有关，记作$\hat{\theta}(x_1,x_2, \dots,x_n )$,称未知参数 $\theta$ 的最大似然估计值，相应的统计量$\hat{\theta}(x_1,x_2, \dots,x_n )$ 称为 $\theta$ 的最大似然估计量。
+### 连续型随机变量
+设总体 $X$ 的概率密度函数 $f\{ X = t_i \} = p(t_i;\theta),i = 1,2, \dots$ 其中 $\theta \in \Phi$ 为带估计参数。
+设$X_1,X_2, \dots ,X_n$ 是来自总体样本 X 的样本，$x_1,x_2, \dots,x_n$ 是样本值，成函数$ L(\theta) = L(x_1,x_2, \cdots , x_n;\theta) = \prod_{i=1}^n p(x_i;\theta) $ 为样本 $x_1,x_2, \dots x_n$ 的似然函数，如果$\theta \in \Phi$ 使得 $L(\hat{\theta}) = \max_{\hat{\theta} \in \Phi} L(\theta)$ 这样 $\hat{\theta}$ 与 $x_1,x_2, \dots,x_n$  有关，记作$\hat{\theta}(x_1,x_2, \dots,x_n )$,称未知参数 $\theta$ 的最大似然估计值，相应的统计量$\hat{\theta}(x_1,x_2, \dots,x_n )$ 称为 $\theta$ 的最大似然估计量。
+
+我们之前学习回归函数$h_{\theta}(\theta^Tx)$ 样子想必大家已经都熟悉了吧。$g(x) = \frac{1}{1+e^{-x}}$
+我们把$h_{\theta}$作为变量带入g(x) 中就得到今天逻辑回归的模型
+$$ h_{\theta} = \frac{1}{1 + e^{- \theta^TX }} $$
+
+我们知道
+
+$$
+\begin{cases}
+  \theta_0 = \theta_0 - \eta \frac{1}{m} \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)}) \\
+  \theta_1 = \theta_1 - \eta \frac{1}{m} \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)}) \cdot x^{(i)}
+\end{cases}
+$$
+
+$$ 2x \rightarrow 2 $$
+$$ x^2 \rightarrow 2x $$
+$$ \frac{\partial g(f(x))}{\partial}  \rightarrow \frac{\partial g(f(x))}{\partial f(x)} \frac{\partial f(x)}{\partial x} $$
+
+$$ \frac{1}{2m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)})^2 \rightarrow 2 \cdot \frac{1}{2m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)}) \rightarrow \frac{1}{m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)}) $$
+
+$$ \frac{1}{2m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)})^2 \rightarrow 2 \cdot \frac{1}{2m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)}) \rightarrow \frac{1}{m} \sum_{i=1}^m (h_{\theta}(x^{(i)}) - y^{(i)}) \cdot x^{(i)} $$
+
 
 ### 无监督学习和监督学习
 我们现在研究大多数都是
