@@ -64,14 +64,19 @@ $$ J(h_{\theta}(x),y) = \begin{cases}
 \end{cases} $$
 
 $h_{\theta}(x)$接近于 1 时候**损失函数**就为 0
-我们是无法对
-
+我们是无法对分段函数进行求导，不过这里用了一个小技巧来解决这个问题。
+$$ J(h_{\theta}(x),y) = -y\log(h_{\theta}(x)) - (1-y)\log(1 - h_{\theta}(x))$$
+- 当$y=1$时，$J(h_{\theta}(x),y) = -\log(h_{\theta}(x)) $
+- 当$y=0$时，$J(h_{\theta}(x),y) = -\log(1 - h_{\theta}(x))$
 $$
 \begin{cases}
   \theta_0 = \theta_0 - \eta \frac{1}{m} \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)}) \\
   \theta_1 = \theta_1 - \eta \frac{1}{m} \sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)}) \cdot x^{(i)}
 \end{cases}
 $$
+
+### 梯度下降
+$$ J(\theta) = -\frac{1}{m}[\sum_{i=1}^m y^{(i)}\log h_{\theta}(x^{(i)}) + (1-y^{(i)})\log(1-h_{\theta})\log(1-h_{\theta}(x^{(i)})) ]$$
 
 $$ 2x \rightarrow 2 $$
 $$ x^2 \rightarrow 2x $$
