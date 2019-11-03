@@ -2,6 +2,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.stats as stats
+dist = stats.beta
 
 def run_bayse_demo():
     num_iterations = 10**6
@@ -38,6 +40,10 @@ def run_game_two():
     plt.ylabel('probability of heads from simulation')
     plt.title('frenquentist probability of heads')
     plt.show()
+
+def run_game_three():
+    trials = [10,20,50,70,100,200,500,800,1000,2000,5000,7000,10000]
+
 if __name__ == "__main__":
     run_game_two()
     # run_bayse_demo() #0.333497
