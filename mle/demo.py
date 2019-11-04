@@ -24,4 +24,7 @@ def draw_likelihood(observations, mu, sigma):
     plt.show()
 
 if __name__ == "__main__":
-    draw_likelihood([2.5],mu=0,sigma=2)
+    obs_mu, obs_sigma = 0, 4
+    observations = np.random.normal(obs_mu, obs_sigma, 20)
+    draw_likelihood(observations, mu=5, sigma=2)
+    draw_likelihood(observations, mu=0, sigma=4)
