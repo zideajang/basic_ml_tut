@@ -3,14 +3,16 @@ from numpy.linalg import inv
 from numpy import dot, transpose
 from numpy.linalg import lstsq
 
-X = [[1,6,2],[1,8,1],[1,10,0],[1,14,2],[1,18,0]]
-y = [[7],[9],[13],[17.5],[18]]
+# X = [[1,6,2],[1,8,1],[1,10,0],[1,14,2],[1,18,0]]
+# y = [[7],[9],[13],[17.5],[18]]
 
 # print(dot(inv(dot(transpose(X),X)),dot(transpose(X),y)))
 # numpy 库也提供了最小二乘函数
 # print(lstsq(X,y)[0])
 
 from sklearn.linear_model import LinearRegression
+X = [[6,2],[8,1],[10,0],[14,2],[18,0]]
+y = [[7],[9],[13],[17.5],[18]]
 model = LinearRegression()
 model.fit(X,y)
 X_test = [[8,2],[9,0],[11,2],[16,2],[12,0]]
