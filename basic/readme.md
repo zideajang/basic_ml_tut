@@ -454,10 +454,11 @@ $$ X = {x_1, x_2, \dots x_N} x_i \in  $$
 
 在贝叶斯我们需要考虑先验概率，我么会考虑先验经验 0.5 ,我们不能无视经验。如果完全关注经验 0.5 。
 我们不考虑 $\Pi(\theta)$
-$$ $$ 我保留$\theta$ 只有一个值，$\Pi(\theta) = \frac{1}{\Delta \theta}$
+我保留$\theta$ 只有一个值，$\Pi(\theta) = \frac{1}{\Delta \theta}$
 点估计让我们得到最大后验估计，就是说我们要求解
 求一个 $\theta$ 值，已知数据 求$\theta$ 的概率，求解某个参数成立最大概率，并且找参数极值，似然求参数概率分布
-$$max P(\theta|x,y)$$ 参数作为随机概率，
+$$ \max P(\theta |x,y) $$ 
+参数作为随机概率，
 
 $$ max P(\theta|x,y) = max \frac{P(y,x|\theta)P(\theta)}{P(y,x)} $$
 
