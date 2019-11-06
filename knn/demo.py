@@ -13,5 +13,11 @@ X = np.array([
 
 # 18 90
 
-print(X.shape)
-print(X[1])
+# print(X.shape)
+# print(X[1])
+
+def run():
+    pass
+
+if __name__ == "__main__":
+    run()

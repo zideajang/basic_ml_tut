@@ -36,21 +36,25 @@ $$h_{\theta} = g(\theta_0 + \theta_1x_1 + \theta_2x_2 + \theta_3x_3^2 + \theta_4
 
 
 
-预测值接近于 0 时候就是代价函数
+我们结合这张图来看一下如何在逻辑回归模型定义评价的损失函数。
 
 $$ -log(h_{\theta}(x)) $$
 当 $y=1,h_{\theta}(x) = 1$ 时 $cost=0$
 当 $y=1,h_{\theta}(x) = 0$ 时 $cost=\infty$
-但我们的真实值为 1 也就是表示 1 表示一个分类，从图中（蓝色的曲线来看）当代价函数越接近 1 代价函数就趋近于 0 ，相反代价函数趋近于无穷大。
 
-图中（红色）线表示当真实值为 0 情况，可以自己分析一下
+先看图中(蓝色)曲线表示当真实值为 1 时候损失函数多对应曲线，不难看粗当代价函数越接近 1 (也就是和真实值一致)损失函数就趋近于 0 ，相反代价函数趋近于无穷大，这就符合我们对于损失函数的要求。
+
+$$ -\log(1-h_{\theta}(x))$$
+
 当 $y=0,h_{\theta}(x) = 1$ 时 $cost=\infty$
 当 $y=0,h_{\theta}(x) = 0$ 时 $cost=0$
 
-然后我们使用一个小技巧将两个分段函数合并为一个。
+先看图中(红色)曲线表示当真实值为 0 时候损失函数多对应曲线，不难看粗当代价函数越接近 0 (也就是和真实值一致)损失函数就趋近于 0 ，相反代价函数趋近于无穷大，这就符合我们对于损失函数的要求。
+
+然后我们使用一个小技巧将两个分段函数合并为一个。通过一个方程我们将一个分段不可导的函数合并为一个可导的连续函数，接下来我们就可以用梯度下降优化方法迭代更新我们的参数。
 $$ L(h_{\theta},y) = -y \log(h_{\theta}) - (1 - y) \log(1 - h_{\theta}(x))$$
 
-当 y 等于 0 或等于 1 得到不同方程
+当 y 取 0 或 1 情况下得到不同方程，这个和上面的函数表达形式一样。
 $$ \begin{cases}
     L(h_{\theta},y) = - \log(h_{\theta}) & y= 1 \\
     L(h_{\theta},y) = - \log(1 - h_{\theta}(x)) & y = 0
@@ -59,19 +63,19 @@ $$ \begin{cases}
 然后我们开始求解逻辑回归也是使用梯度下降法，要做梯度下降我们就需要让让损失函数对参数进行求导。
 $$ L(h_{\theta},y) = - \frac{1}{m} \sum_{i=1}^N y \log(h_{\theta}) + (1 - y) \log(1 - h_{\theta}(x)) $$
 
-这里求导过程要比之前的线性逻辑回归要复杂一些，涉及复合函数求导。
+这里求导过程要比之前的线性逻辑回归要复杂一些，涉及复合函数求导。涉及到链式求导方式来解决这中函数，我们在开始正式求导前，有必要复习一下求导中一些小技巧，这里特别注意一下，就是有关 sigmoid 函数求导函数为了最后一个方程，这里大家只要知道 sigmoid 函数的导数函数的模样，具体如何推导来的大家可以自己查查下资料。
 
 $$ \frac{\partial L(\theta)}{\partial h_{\theta}(x)} \frac{\partial h_{\theta}(x)}{\partial \theta}$$
 
-首先我们对 log 进行求导,$\log f(x) $ 的导数就是 $\frac{1}{f(x)}$
+首先我们对 log 进行求导,$\log f(x) $ 的导数就是 
+$$\frac{1}{f(x)}$$
+
 $$
 \begin{cases}
     h_{\theta}(x) = g(\theta^Tx) \\
     g(x) = \frac{1}{1 + e^{-x}} \\
     h_{\theta} \prime = h_{\theta}(x)(1 - h_{\theta}(x))
-
-\end{cases}
-$$
+\end{cases} $$
 首先我们看一下上面这些方程，只有理解这些方程含义和由来我们才能真正理解接下来逻辑回归求导过程。
 
 $$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^m(\frac{y}{h_{\theta}(x)} - \frac{(1-y)}{1 - h_{\theta}(x)} ) \frac{\partial h_{\theta}(x)}{\partial \theta}$$
@@ -89,6 +93,8 @@ $$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^
 经过一些列化简后我们就得到想要得到梯度下降的优化参数方程。
 
 $$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} =   \frac{{1}}{m} \sum_{i=1}^m x(h_{\theta}(x) - y)$$
+
+有了上面求导过程我们就不难理解上一次分享实例，大家可以自己看一下上一次最后那个例子，尝试理解一下，其实机器学习中代码和实现比较好理解，难理解的是其背后原理。而且在机器学习中了解其算法和模型设计背后思想是十分必要，只有理解其原理才能通过调参数来训练出来好的模型​。​
 
 有了优化，我们现在需要对结果进行评估。
 ### 正确率和召回率
@@ -158,6 +164,8 @@ cabin       204
 embarked    889
 ```
 
+![titanic_missing_data.png](https://upload-images.jianshu.io/upload_images/8207483-d6ed3fc216ffafed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 891 entries, 0 to 890
@@ -185,9 +193,41 @@ sns.heatmap(train.isnull(),yticklabels=False,cbar=False,cmap='viridis')
 plt.show()
 ```
 
+)
+
 ![titanic_missing_data.png](https://upload-images.jianshu.io/upload_images/8207483-d6ed3fc216ffafed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 从热力图上来看，大约 20% 年龄数据丢失，在机舱(carbin)列丢失数据过多在清洗数据会将其删除。
+
+
+![titanic_survived_bar.png](https://upload-images.jianshu.io/upload_images/8207483-6e91c3fb9115b156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+通过上面直方图可以看出遇难者(用 0 表示遇难)为 60% 而幸存者(用 1 表示)占到 40%
+
+我们
+
+```python
+df.survived.value_counts(normalize=True).plot(kind="bar",alpha=0.5)
+plt.title("Survived")
+
+plt.subplot2grid((2,3),(0,1))
+plt.scatter(df.survived,df.age,alpha=0.1)
+plt.title("Age wrt Survived")
+```
+
+![幸存者和遇难者年龄分布图](https://upload-images.jianshu.io/upload_images/8207483-7ff2cbcb924d9bb5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+在图Age wrt Survived 中横坐标 0 代表遇难者 1 代表幸存者，可以发现幸存者年龄要小于遇难者的年龄。
+
+```python
+plt.subplot2grid((2,3),(0,2))
+df.pclass.value_counts(normalize=True).plot(kind="bar",alpha=0.5)
+plt.title("class")
+```
+
+![客舱等级](https://upload-images.jianshu.io/upload_images/8207483-8501a318f5ba8bb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![图](https://upload-images.jianshu.io/upload_images/8207483-a63e7485de93ae1e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ### 可视化来观察数据
 #### 查看幸存者中男女比例
