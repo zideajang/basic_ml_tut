@@ -29,14 +29,99 @@ $$h_{\theta} = g(\theta_0 + \theta_1x_1 + \theta_2x_2 + \theta_3x_3^2 + \theta_4
 可以使用最简单的单位阶跃
 
 
-损失函数
+逻辑回归的损失函数
+在逻辑回归中代价函数
+
+![logistic_reg_loss_fun.png](https://upload-images.jianshu.io/upload_images/8207483-827ace52a58f28ad.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
 
 预测值接近于 0 时候就是代价函数
+
+$$ -log(h_{\theta}(x)) $$
 当 $y=1,h_{\theta}(x) = 1$ 时 $cost=0$
 当 $y=1,h_{\theta}(x) = 0$ 时 $cost=\infty$
+但我们的真实值为 1 也就是表示 1 表示一个分类，从图中（蓝色的曲线来看）当代价函数越接近 1 代价函数就趋近于 0 ，相反代价函数趋近于无穷大。
 
-当 $y=1,h_{\theta}(x) = 1$ 时 $cost=\infty$
-当 $y=1,h_{\theta}(x) = 0$ 时 $cost=0$
+图中（红色）线表示当真实值为 0 情况，可以自己分析一下
+当 $y=0,h_{\theta}(x) = 1$ 时 $cost=\infty$
+当 $y=0,h_{\theta}(x) = 0$ 时 $cost=0$
+
+然后我们使用一个小技巧将两个分段函数合并为一个。
+$$ L(h_{\theta},y) = -y \log(h_{\theta}) - (1 - y) \log(1 - h_{\theta}(x))$$
+
+当 y 等于 0 或等于 1 得到不同方程
+$$ \begin{cases}
+    L(h_{\theta},y) = - \log(h_{\theta}) & y= 1 \\
+    L(h_{\theta},y) = - \log(1 - h_{\theta}(x)) & y = 0
+\end{cases} $$
+
+然后我们开始求解逻辑回归也是使用梯度下降法，要做梯度下降我们就需要让让损失函数对参数进行求导。
+$$ L(h_{\theta},y) = - \frac{1}{m} \sum_{i=1}^N y \log(h_{\theta}) + (1 - y) \log(1 - h_{\theta}(x)) $$
+
+这里求导过程要比之前的线性逻辑回归要复杂一些，涉及复合函数求导。
+
+$$ \frac{\partial L(\theta)}{\partial h_{\theta}(x)} \frac{\partial h_{\theta}(x)}{\partial \theta}$$
+
+首先我们对 log 进行求导,$\log f(x) $ 的导数就是 $\frac{1}{f(x)}$
+$$
+\begin{cases}
+    h_{\theta}(x) = g(\theta^Tx) \\
+    g(x) = \frac{1}{1 + e^{-x}} \\
+    h_{\theta} \prime = h_{\theta}(x)(1 - h_{\theta}(x))
+
+\end{cases}
+$$
+首先我们看一下上面这些方程，只有理解这些方程含义和由来我们才能真正理解接下来逻辑回归求导过程。
+
+$$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^m(\frac{y}{h_{\theta}(x)} - \frac{(1-y)}{1 - h_{\theta}(x)} ) \frac{\partial h_{\theta}(x)}{\partial \theta}$$
+
+对方程进行化简，这里很简单我就不啰嗦了。
+
+$$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^m(\frac{y(1 - h_{\theta}(x)) - h_{\theta}(x)(1-y)  }{h_{\theta}(x)(1 - h_{\theta}(x))} ) \frac{\partial h_{\theta}(x)}{\partial \theta}$$
+
+化简之后将$h_{\theta} \prime = h_{\theta}(x)(1 - h_{\theta}(x)$ 将这个已知 sigmoid 带入方程进行化简。
+
+$$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^m(\frac{y - h_{\theta}(x) }{h_{\theta}(x)(1 - h_{\theta}(x))} ) \frac{\partial h_{\theta}(x)}{\partial \theta}$$
+
+$$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} = - \frac{{1}}{m} \sum_{i=1}^m(\frac{y - h_{\theta}(x) }{h_{\theta}(x)(1 - h_{\theta}(x))} )  h_{\theta}(x)(1 - h_{\theta}(x))x$$
+
+经过一些列化简后我们就得到想要得到梯度下降的优化参数方程。
+
+$$ \frac{\partial(h_{\theta}(x),y)}{\theta \theta} =   \frac{{1}}{m} \sum_{i=1}^m x(h_{\theta}(x) - y)$$
+
+有了优化，我们现在需要对结果进行评估。
+### 正确率和召回率
+正确率(Precsion)和召回率(Recall)是广泛应用于信息检索和统计学分类领域的两个度量值，用来评估结果的质量。
+
+一般来说，正确率就是检索出来的条目有多少是正确的，召回率就是所有正确的条目有多少被检索出来
+$$ F1值 = 2 \times \frac{正确率 \times 召回率}{正确率 + 召回率} $$
+是综合上面两个指标的估计指标，用于反映整体的指标
+
+这几个指标的取值都在 0 - 1 之间，数值越接近于 1 效果越好。
+
+有三类事物分别为 A，B 和 C 他们数量分别是 1400，300，300 我们目标获得更多的 A，进行一次收集后得到 A B 和 C 数量分别是 700，200 和 100 那么
+
+$$ 正确率 = \frac{700}{700 + 200 + 100} = 70 \% $$
+$$ 召回率 = \frac{700}{1400} = 50 \% $$
+$$ F1值 = \frac{0.7 \times 0.5 \times 2}{0.7 + 0.5} = 58.3 \% $$
+
+
+
+
+
+$$ 正确率 = \frac{1400}{1400 + 300 + 300} = 70 \% $$
+$$ 召回率 = \frac{1400}{1400} = 100 \% $$
+$$ F1值 = \frac{0.7 \times 1 \times 2}{0.7 + 1} = 82.35 \% $$
+
+我们希望检索的结果的正确率越高越好，同时也希望召回率越高越好不过在某些情况他们之间是矛盾的。有的时候我们想要提高准确率就会影响召回率，反之亦然。
+
+正式因为正确率和召回率指标有时候出现的矛盾原因，我们可以通过 F-Measue 来综合考虑指标这时候我们就可以用 F1值来综合考虑。
+
+其实上面介绍 F1公式是这个 $\beta = 1 $公式的特例。
+
+$$ F_{\beta} = (1 + \beta^2) \dot \frac{准确率 \times 召回率}{(\beta^2 \times 准确率 ) + 召回率} $$
+
 
 有关线
 ### 泰坦尼克生与死
@@ -49,12 +134,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 这里我们使用 pandas 的一个 python 数据库，pandas 好处就是可以将数据进行类似表格格式格式化。
+
 ### 准备数据
 ```python
 train = pd.read_csv('./data/train.csv')
 print train.head()
 ```
-
+读取训练数据集，我们打印每一个列数据量，可以查看出某些列数据并不完整，carbin 只有在 204 条记录中有值。
 ```
 print train.count()
 ```

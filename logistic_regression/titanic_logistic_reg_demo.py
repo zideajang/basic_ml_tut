@@ -16,7 +16,7 @@ train = pd.read_csv('./data/train.csv')
 
 # 查看数据基本信息
 # print train.head()
-print train.count()
+# print train.count()
 # print train.info()
 
 # 查看数据丢失情况
