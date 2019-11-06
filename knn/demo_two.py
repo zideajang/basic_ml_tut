@@ -6,7 +6,39 @@ from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 import numpy as np
 from sklearn import linear_model, preprocessing
+# from sklearn import train_test_split
+from sklearn.model_selection import train_test_split
 
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+def iris_classifier():
+    print("iris classifier")
+    names =  [
+        'sepal_length',
+        'sepal_width',
+        'petal_length',
+        'petal_width',
+        'class',
+    ]
+    df = pd.read_csv("data/iris.csv",header=None,names=names)
+    # print(data.head())
+    # print(data)
+    X = np.array(df.ix[:, 0:4])
+    y = np.array(df['class'])
+    # print(X)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+    # instantiate learning model (k = 3)
+    knn = KNeighborsClassifier(n_neighbors=3)
+
+    # fitting the model
+    knn.fit(X_train, y_train)
+
+    # predict the response
+    pred = knn.predict(X_test)
+
+    # evaluate accuracy
+    print("accuracy: {}".format(accuracy_score(y_test, pred)))
 
 def car_classifier():
     data = pd.read_csv("data/car.csv")
@@ -54,4 +86,4 @@ def run():
 
 if __name__ == "__main__":
     # show_table_header()
-    car_classifier()
+    iris_classifier()
