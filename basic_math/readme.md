@@ -4,6 +4,24 @@ $$ \hat{y} = \theta_1 x_1 + \theta_2 x_2 + \dots \theta_i x_i $$
 
 $$ L(\theta) = \sum_{i=1}^m (f(\theta_i,\theta_i) - y_i) $$
 
+$$ s=\frac{1}{0!} + \frac{1}{1!} + \cdots + \frac{1}{n!} + \cdots $$
+
+$$ f(x) = \log_a x $$
+
+
+
+### 导数
+#### 导数
+#### 常用函数的导数
+导数会在损失函数部分会用到导数，
+- $f(x) = x^x, x>0$
+$$ t = x^x $$
+$$ \ln t = x \ln x $$
+$$ t= e^{-\frac{1}{e}} $$
+- $N \rightarrow \infty \Rightarrow \ln N! \rightarrow N(\ln N - 1)$
+$$ln N! = \sum_{i=1}^N \ln i \approx \int_1^N \ln xdx $$
+
+### 泰勒公式和拉格朗日公式(Maclaurin 公式)
 
 
 ### 流程
