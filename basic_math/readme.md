@@ -8,8 +8,20 @@ $$ s=\frac{1}{0!} + \frac{1}{1!} + \cdots + \frac{1}{n!} + \cdots $$
 
 $$ f(x) = \log_a x $$
 
+$$ \frac{f(x - \Delta x) - f(x)}{\Delta x} $$
+$$ = \frac{\log_{a}(x - \Delta x) - \log_{a}(x)}{\Delta x} $$
+$$ = \frac{\log_a \left( \frac{x + \Delta x}{ x} \right) }{\Delta x}$$
+$$ = \log_a \left( \frac{x+ \Delta x}{x} \right)^{\frac{1}{\Delta x}}$$
+$$ \rightarrow \log_a(1 + \Delta x)^{\frac{1}{\Delta x}} == 1 \Rightarrow \lim_{\Delta \rightarrow 0} (1 + \Delta x)^{\frac{1}{\Delta x}} = \alpha$$
+$$ \lim_{n \rightarrow \infty} ( 1 + \frac{1}{n})^n$$
 
+$$ x_n = \left( 1+ \frac{1}{n}  \right)^n $$
+$$ = 1 + C_n^1 \frac{1}{n} + C_n^2 \frac{1}{n^2} + C_n^3 \frac{1}{n^3} + \cdots + C_n^n \frac{n}{n^n}$$
 
+$$ 1 + n \cdot \frac{1}{n} + \frac{n(n-1)}{2!} \cdot \frac{1}{n^2} + \cdots $$
+
+$$ 1 + 1 + \frac{1}{2!} \cdot \left( 1 - \frac{1}{n} \right) + \frac{1}{3!} \cdot \left( 1 - \frac{1}{n} \right)\left( 1 - \frac{2}{n} \right)  \cdots + \frac{1}{n!} \cdot \left( \frac{}{} \right)$$
+$$$$
 ### 导数
 #### 导数
 #### 常用函数的导数
