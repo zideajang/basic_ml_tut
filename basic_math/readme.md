@@ -22,10 +22,20 @@ $$ 1 + n \cdot \frac{1}{n} + \frac{n(n-1)}{2!} \cdot \frac{1}{n^2} + \cdots $$
 
 $$ 1 + 1 + \frac{1}{2!} \cdot \left( 1 - \frac{1}{n} \right) + \frac{1}{3!} \cdot \left( 1 - \frac{1}{n} \right)\left( 1 - \frac{2}{n} \right)  \cdots + \frac{1}{n!} \cdot \left( \frac{}{} \right)$$
 $$$$
-### 导数
+### 导数
+
+
+
+#### 常用导数
+$$ (C) \prime = 0$$
+$$ (x^{\mu}) \prime = \mu x^{\mu - 1} $$
+
+$$ (\sin x) \prime = \cos x $$
+$$ (\cos x) \prime = - \sin x $$
+
 #### 导数
 #### 常用函数的导数
-导数会在损失函数部分会用到导数，
+导数会在损失函数部分会用到导数，
 - $f(x) = x^x, x>0$
 $$ t = x^x $$
 $$ \ln t = x \ln x $$
@@ -33,20 +43,36 @@ $$ t= e^{-\frac{1}{e}} $$
 - $N \rightarrow \infty \Rightarrow \ln N! \rightarrow N(\ln N - 1)$
 $$ln N! = \sum_{i=1}^N \ln i \approx \int_1^N \ln xdx $$
 
+#### 梯度计算
+$$ \frac{\partial f(x,y)}{\partial x} \times \cos + \frac{\partial f(x,y)}{ \partial y} \times \sin x$$
+
+我们都法线方向
+
+$$ y = x^2 $$
+$$ y = 2x $$
+$$ y = 2 $$
+
+如果一个函数进行二阶求导后是大于0 说明该函数就是凸函数，凸函数就是可以用到梯度优化算法，这个想必大家都清除。那么对于二元的函数我们又应该如何判断是否为凸函数，下面我们来具体在看一看如何判断二元二阶函数是否是**凸函数**。
+
+$$ 2x^2 + 3y^2 + xy $$
+先对 x 求偏导数
+$$ \frac{\partial f(x,y)}{ \partial x} = 4x + y $$
+然后对 y 进行求偏导数
+
 ### 泰勒公式和拉格朗日公式(Maclaurin 公式)
 
 
-### 流程
+### 流程
 - 数据收集
-- 数据清洗
+- 数据清洗
 - 特征工程
 - 数据建模
 - 数据模型应用
 
 
 
-### 概率论与贝叶斯先验
-先验概率就是根据我们已知的知识和经验给出概率
+### 概率论与贝叶斯先验
+先验概率就是根据我们已知的知识和经验给出概率
 **本福特定律**又称第一数字定律，是在实际生活得出的一组数据中，
 
 ### 商品推荐
@@ -83,4 +109,4 @@ $$ E(x) = x_1p_1, x_2p_2 \dots x_np_n$$
 $$ D(x) = (x_1 - E(x))^2  p_1  + (x_2 - E(x))^2  p_2  + \dots (x_n - E(x))^2  p_n $$
 加权方差
 $$ D(x) = E(x^2) - [E(x)]^2 $$
-平方期望减去期望平方
+平方期望减去期望平方
