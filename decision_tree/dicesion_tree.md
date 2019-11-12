@@ -301,19 +301,116 @@ $$ - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) p(x) $$
 $$ - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)}$$
 $$ -\sum_{x,y} p(x,y) log p(y|x) $$
 
+## 公式推导
 
 ----
+
+### 信息熵公式的推导
+学过概率后,如果两个事件 x 和 y 是独立，这个应该不难理解$$ P(x,y) = P(x) \cdot P(y)$$ 
+首先我们已经知道了信息熵和概率关系是成反比，也就是说概率越大信息熵越小，这个应该也不难理解，如果一个一定会发生事，例如太阳从东方升起，这个事件给我们带来信息量非常小
+![dt_05.jpeg](https://upload-images.jianshu.io/upload_images/8207483-486e514a2beeaf77.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们知道$\ln x$函数模样如下图，$\ln x$ 是一个增函数
+![lnx](https://upload-images.jianshu.io/upload_images/8207483-5167cb7e309e678b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+如果对函数添加负号就变成减函数，而且在 0 - 1 区间函数值符号我们要求就是在 1 时函数值为 0 而接近 0 时为无穷大
+![-lnx](https://upload-images.jianshu.io/upload_images/8207483-cfd0f1caf3c84759.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+然后我们进步想象一下如果希望两个事件的信息量也是可以做加减
+$$H(y|x) = H(x,y) - H(x) $$
+
+而且 $\ln$ 本质还可将乘法变成加法，这符合我们对熵表达
+
+|  X | 0   | 1|
+|---|---|---|
+|  概率 | 1 - p | p|
+|  信息量 | -ln (1 - p) | -ln p|
+|期望|
+大家都知道信息熵很大事件并不是大概率事件，所有我们根据期望公式对 logP 求期望就得
+信息熵的概念
+$$E(\log P) = -(1 - p) \cdot \ln(1 - p) - p \cdot \ln p$$
+$$ E(\log P) = - \sum_{i=1}^n P_i \log P_i$$
+上面离散情况下求信息熵
+$$ H(X) \approx \int_0^{f(x)} \log f(x) dx $$
+
+### 条件熵公式的推导
+
+- 我们知道x 和 y 的熵，也知道 x 的熵
+- 如果我们用 H(x,y) 减去 H(x) 的熵，那么就等价了 x 是确定性
+- 也就是在已知 x 的条件下计算 y 的熵，这就是条件熵的概念
+$$ H(X,Y) - H(X)$$
+
+在 x 给定掉件 y 的信息熵，(x,y) 发生所包含的熵，减去 X 单独发生包含的熵:在 x 发生的前提下, y 发生**新**带来的熵。
+$$ H(Y|X) = H(X,Y) - H(X) $$
+下面我们来推导一下条件熵
+
+$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} p(x) \log p(x)$$
+公式中$p(x)$可以写出$\sum_y p(x,y)$ 把所有的 y 加起来,进行积分去掉 y
+$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} (\sum_y p(x,y)) \log p(x)$$
+$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) \log p(x)$$
+
+$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) p(x) $$
+
+$$ = - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)}$$
+那么我们利用学过概率就知道$\frac{p(x,y)}{p(x)} = p(y|x)$
+
+$$ = -\sum_{x,y} p(x,y) log p(y|x) $$
 
 上面推导的公式结果$ -\sum_{x,y} p(x,y) log p(y|x) $ 要是能够变成$ -\sum_{x,y} p(y|x) log p(y|x) $ 形式我们看起来就会舒服多了。
 ###
 $$ - \sum_x \sum_y p(x,y) \log p(y|x) $$
+我们将$p(x,y)$ 替换为 $ p(y|x) p(x) $
 $$ - \sum_x \sum_y p(x)p(y|x) \log p(y|x) $$
 $$ - \sum_x p(x) \sum_y p(y|x) \log p(y|x) $$
 
-$$ \sum p(x) ( - \sum_y p(y|x) \log p(y|x))$$
+$$ \sum_x p(x) ( - \sum_y p(y|x) \log p(y|x))$$
 $- \sum_y p(y|x) \log p(y|x)$ 可以理解为 x 给定值时候 H(y) 因此我们就可以写成下面的公式
 $$ = \sum_x p(x) H(Y|X = x)$$
 
+### 相对熵
+假设p(x),q(x) 是 X 中取值的两个概率分布，则 p 对 q 的相对熵是
+$$ D(p||q) = \sum_x p(x) \log \frac{p(x)}{q(x)} = E_{p^{(x)}} = \log \frac{p(x)}{q(x)}$$
+
+### 互信息
+两个随机变量 X 和 Y 的互信息，定义为 X 和 Y 的联合分布和独立分布乘积的相对熵
+$$ I(X,Y) = D(P(X,Y) || P(X)P(Y)) $$
+$$ I(X,Y) = \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)p(y)} $$
+
+接下来我们看一看这个公式
+$$ H(Y) - I(X,Y)$$
+$$ = - \sum_y p(y) \log p(y) - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)p(y)}$$
+$$ - \sum_y \left( \sum_x p(x,y) \right) \log p(y) -   \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)p(y)}$$
+
+$$ - \sum_{xy} p(x,y) \log p(y) - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)p(y)} $$
+$$ - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)}$$
+$$ -\sum_{x,y} \log p(y|x) $$
+$$ = H(Y|X) $$
+
+$$ I(x,y) = H(Y) - H(Y|X) $$
+#### 整理公式
+条件熵定义
+$$ H(Y|X) = H(X,Y) - H(X)$$
+刚刚我们推导出公式如下
+$$H(Y|X) = H(Y) - I(X,Y) $$
+$$ I(x,y) = H(Y) - H(Y|X) $$
+根据对偶性
+$$H(X|Y) = H(X,Y) - H(Y)$$
+$$H(X|Y) = H(X) - I(X,Y) $$
+$$I(X,Y) = H(X) + H(Y) - H(X,Y) $$
+然后我们就能推导出
+$$ H(X|Y) \le H(X)$$
+$$ H(Y|X) \le H(Y)$$
+
+![dt_12.jpeg](https://upload-images.jianshu.io/upload_images/8207483-b8225042ba6dd14a.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+### KL 散度
+$$ KL(p||q) = p \ln \frac{p}{q}$$
+$$ = p(\ln p - \ln q)$$
+$$ = p \ln p - p \ln q$$
+$$ = - \left( - p \ln p + p \ln q   \right)$$
+$$ = - \left( H(p) + p \ln q   \right)$$
+
+- 
 ### 如何找到策略
 #### 离散情况
 - 每一次找到作为判断特征都会找那个给我们信息的特征，也就是给我们互信息最多或是条件熵最小的特征
@@ -393,29 +490,11 @@ $$Gini(p) = \sum_{k=1}^k p_k(1-p_K) = \sum_{k=1}^k p_k^2$$
 
 构造树的基本思想是随着深度的增加，节点的熵迅速地下降，熵降低速度越快越好
 
-|  X | 0   | 1|
-|---|---|---|
-|  概率 | 1 - p | p|
-|  信息量 | -ln (1 - p) | -ln p|
-信息熵的概念
-$$ E(\log P) = - \sum_{i=1}^n P_i \log P_i$$
-$$ H(X) \approx \int_0^{f(x)} \log f(x) dx $$
+
 
 ### 条件熵
 
-在 x 给定掉件 y 的信息熵，(x,y) 发生所包含的熵，减去 X 单独发生包含的熵:在 x 发生的前提下, y 发生**新**带来的熵。
-$$ H(y|y) = H(X,Y) - H(X) $$
-下面我们来推导一下条件熵
 
-$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} p(x) \log p(x)$$
-把所有的 y 加起来进行积分后积分掉 x,
-$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} (\sum_y p(x,y)) \log p(x)$$
-$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) \log p(x)$$
-
-$$ - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) p(x) $$
-
-$$ - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)}$$
-$$ -\sum_{x,y} p(x,y) log p(y|x) $$
 
 ###
 $$ - \sum_x \sum_y p(x,y) \log p(y|x) $$
