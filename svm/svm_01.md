@@ -13,7 +13,8 @@ $$ y -\frac{1}{2} x  - 1 =0 $$
 $$ 2y - x - 2 = 0$$
 $$ 2x_1 - x_2 - 2 = 0$$
 $$ 
-    \left[ \begin{matrix}
+    \left[ 
+    \begin{matrix}
         2 \\
         1
     \end{matrix}
@@ -22,9 +23,7 @@ $$
     \left[ 
     \begin{matrix}
         x_1& x_2
-    \end{matrix}    
-        
-    \right]
+    \end{matrix}\right]
     - 2 $$
 也可以表示为如下
 $$ w^T x + b = 0 $$
@@ -32,3 +31,5 @@ $$ w^T x + b = 0 $$
 $$ f(x_0,y_0) = \frac{Ax_0 + By_0 + C}{\sqrt{A^2 + B^2}} $$
 
 $$ f(x,y) =  $$
+
+$$ \vec{w} \cdot \vec{x} + b = 0$$

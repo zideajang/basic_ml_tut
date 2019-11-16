@@ -9,10 +9,11 @@ from sklearn.pipeline import Pipeline
 
 import matplotlib.pyplot as plt
 from sklearn import datasets
+import numpy as np
 
 def demo_one():
     df = pd.read_csv('./data/ad.data',header=None)
-
+    print df.head()
     # print df.columns.values
     explanatory_variable_columns = set(df.columns.values)
     # print explanatory_variable_columns
@@ -33,12 +34,22 @@ def demo_two():
       
     dt_clf = DecisionTreeClassifier(max_depth=2,criterion="entropy")
     dt_clf.fit(X,y)
-    
-def plot_decision_boundary():
-    
+
+def plot_decision_boundary(model,axis):
+    x0,x1 = np.meshgrid(
+        np.linspace(axis[0],axis[1],int(((axis[1] - axis[0]) * 100)).reshape)
+    )
+
+def entropy(p):
+    return -p * np.log(p) - ( 1 - p) * np.log(1-p)
+
+def demo_three():
+    x = np.linspace(0.01,0.99,200)
+    plt.plot(x,entropy(x))
+    plt.show()
 
 def run():
-    demo_two()
+    demo_three()
 
 if __name__ == "__main__":
-    run()
+    demo_one()
