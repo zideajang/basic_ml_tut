@@ -215,15 +215,17 @@ print(determine_best_split(data,potential_splits))
 # example_tree =  {"petal_width <- 0.8":["Iris-setosa",{"petal_width <= 1.65":[{"petal_length <= 4.9":["Iris-versicolor","Iris-virginical"]},"Iris-virginica"]}]}
 
 # 算法
-def decision_tree_algorithm(df,counter=0):
+def decision_tree_algorithm(df,counter=0,min_samples=2,max_depth=5):
     # 转换类型 numpy array
     if counter == 0:
+        global COLUMN_HEADERS
+        COLUMN_HEADERS = df.columns
         data = df.values
     else:
         data = df
 
     # 
-    if check_purity(data):
+    if (check_purity(data)) or (len(data) < min_samples) or (counter == max_depth):
         classification = classify_data(data)
         return classification
     # 递归
@@ -235,15 +237,19 @@ def decision_tree_algorithm(df,counter=0):
         data_below,data_above = split_data(data,split_column,split_value)
 
         # 创建分支
-        question = "{} <= {}".format(split_column,split_value)
+        feature_name = COLUMN_HEADERS[split_column]
+        question = "{} <= {}".format(feature_name,split_value)
         sub_tree = {question:[]}
 
         # find answer (recursion)
-        yes_answer = decision_tree_algorithm(data_below,counter)
-        no_answer = decision_tree_algorithm(data_above,counter)
+        yes_answer = decision_tree_algorithm(data_below,counter,min_samples,max_depth)
+        no_answer = decision_tree_algorithm(data_above,counter,min_samples,max_depth)
 
-        sub_tree[question].append(yes_answer)
-        sub_tree[question].append(no_answer)
+        if yes_answer == no_answer:
+            sub_tree = yes_answer
+        else:
+            sub_tree[question].append(yes_answer)
+            sub_tree[question].append(no_answer)
 
         return sub_tree
 
@@ -251,4 +257,28 @@ def decision_tree_algorithm(df,counter=0):
 tree = decision_tree_algorithm(train_df[train_df.label != "Iris-virginica"])
 print(tree)
 {'3 <= 0.8': ['Iris-setosa', 'Iris-versicolor']}
+'''
+tree = decision_tree_algorithm(train_df,max_depth=3)
+pprint(tree)
+
+'''
+{'3 <= 0.8': ['Iris-setosa',
+              {'3 <= 1.65': [{'2 <= 4.95': ['Iris-versicolor',
+                                            {'3 <= 1.55': ['Iris-virginica',
+                                                           'Iris-versicolor']}]},
+                             {'2 <= 4.85': [{'1 <= 3.1': ['Iris-virginica',
+                                                          'Iris-versicolor']},
+                                            'Iris-virginica']}]}]}
+'''
+
+'''
+min_samples = 60
+'petal_width <= 0.8': ['Iris-setosa',
+                        {'petal_width <= 1.65': ['Iris-versicolor',
+                                                 'Iris-virginica']}]}
+'''
+
+'''
+max_depth=1
+{'petal_width <= 0.8': ['Iris-setosa', 'Iris-versicolor']}
 '''
