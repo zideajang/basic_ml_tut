@@ -113,21 +113,21 @@ $$ \log P(x,y) = \log P(x)P(y) = \log P(x) + \log P(y) $$
 在 x 给定掉件 y 的信息熵，(x,y) 发生所包含的熵，减去 X 单独发生包含的熵:在 x 发生的前提下, y 发生**新**带来的熵。也就是如果已知 x 的条件下是否给 y 的熵带来变化。
 
 
-$$ H(y|x) = H(X,Y) - H(X) $$???
+$$ H(Y|X) = H(X,Y) - H(X) $$???
 首先我们看一下熵的一些基本操作
 - 在 x 和 y 都是相互独立
-$$ H(x,y) = H(x) + H(y)$$
+$$ H(Y|X) = H(x) + H(y)$$
 - 在 x 和 y 并非是相互独立
-$$ H(x,y) < H(x) + H(y)$$
+$$ H(Y|X) < H(x) + H(y)$$
 
 我们这里对 $$H(x,y)$$ 进行简单推导
 根据信息熵的概念我们可以推导下面公式
-$$ H(x,y)=  - \sum_{x,y} P(x,y)ln(P(x,y)) $$
+$$ H(x,y)=  - \sum_{x,y} P(x,y)\log(P(x,y)) $$
 然后根据$P(x,y) = p(y|x)P(x)$ 带入下面等式就可以得到下面公式
-$$ = -\sum_{x,y} P(x,y) \ln (P(x)P(y|x)) $$
+$$ = -\sum_{x,y} P(x,y) \log (P(x)P(y|x)) $$
 进一步推导为
-$$ = - \sum_{x,y}  P(x,y)(\ln P(x) + \ln P(y|x)) $$
-$$ = - \sum_{x,y}  P(x,y) \ln P(x) - \sum_{x,y} P(x,y) \ln P(y|x)) $$
+$$ = - \sum_{x,y}  P(x,y)(\log P(x) + \log P(y|x)) $$
+$$ = - \sum_{x,y}  P(x,y) \log P(x) - \sum_{x,y} P(x,y) \ln P(y|x)) $$
 因为这里我们只对 x 进行积分(求和)所有可以在前半部化简为
 $$ = - \sum_{x}  P(x) \ln P(x) - \sum_{x,y} P(x,y) \ln P(y|x)) \tag{1}$$
 $$ = H(x) - \sum_{x,y} P(x,y) \ln P(y|x)) $$
@@ -166,11 +166,14 @@ $$ H(y|x) = H(x,y) - H(x) = -\sum_{x,y} P(x,y) \log P(y|x) $$
 
 $$ I(x,y) = H(x,y) - H(x) - H(y) $$
 只要证明了$ I(x,y) \le 0 $ 也就是说明$H(x,y) \le H(x) + H(y)$,也就证明了 
-$$ H(y|x) - H(y) = - (\sum_{x,y} \log P(y|x)) + \sum_{x,y} P(x,y) \log P(y) $$
+$$ H(Y|X) - H(Y) $$
+$$ = - (\sum_{x,y} p(x,y) \log P(y|x)) + \sum_{x,y} P(x,y) \log P(y) $$
 
 
 $$ = -\left[ \sum_{x,y} P(x,y)(\log \frac{P(x,y)}{P(x)} - \log P(y)) \right]$$
 $$ = -\sum_{x,y} P(x,y) \log \frac{P(x,y)}{P(x)P(y)} $$
+
+$$H(Y|X) - H(X) = - I(X,Y)$$
 
 ### 构建决策树
 我们有了上面的基础知识，了解了什么是条件熵和互信息，表示我们可以通过给定特征来降低信息熵，我们回到决策树的问题上来看一看。
@@ -434,14 +437,14 @@ $$ H(Y|X) = H(X,Y) - H(X) $$
 下面我们来推导一下条件熵
 
 $$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} p(x) \log p(x)$$
-公式中$p(x)$可以写出$\sum_y p(x,y)$ 把所有的 y 加起来,进行积分去掉 y
+式子加号右边中的 $p(x)$ 可以写出 $\sum_y p(x,y)$ ，这是因为 $ \sum_y p(x,y) $ 中 p(x,y) 对于 y 的积分，把所有的 y 加起来,进行积分去掉 y
+
 $$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x} (\sum_y p(x,y)) \log p(x)$$
-$$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) \log p(x)$$
 
 $$ = - \sum_{x,y} p(x,y) \log p(x,y) + \sum_{x,y} p(x,y) p(x) $$
 
 $$ = - \sum_{x,y} p(x,y) \log \frac{p(x,y)}{p(x)}$$
-那么我们利用学过概率就知道$\frac{p(x,y)}{p(x)} = p(y|x)$
+那么我们利用学过条件概率就知道$\frac{p(x,y)}{p(x)} = p(y|x)$
 
 $$ = -\sum_{x,y} p(x,y) log p(y|x) $$
 
@@ -481,7 +484,7 @@ $$ I(x,y) = H(Y) - H(Y|X) $$
 $$ H(Y|X) = H(X,Y) - H(X)$$
 刚刚我们推导出公式如下
 $$H(Y|X) = H(Y) - I(X,Y) $$
-$$ I(x,y) = H(Y) - H(Y|X) $$
+$$ I(X,Y) = H(Y) - H(Y|X) $$
 根据对偶性
 $$H(X|Y) = H(X,Y) - H(Y)$$
 $$H(X|Y) = H(X) - I(X,Y) $$
@@ -613,3 +616,4 @@ $$ C(T) = \sum_{releaf} N_t \cdot H(t) $$
 
 
 ###
+$$ \sum_{x,y}p(y|x) \log p(y|x) $$

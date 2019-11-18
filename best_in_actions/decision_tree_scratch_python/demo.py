@@ -282,3 +282,23 @@ min_samples = 60
 max_depth=1
 {'petal_width <= 0.8': ['Iris-setosa', 'Iris-versicolor']}
 '''
+
+# 分类器
+example = test_df.iloc[0]
+# print(example)
+# sub_tree = {question:[yes_answer,no_answer]}
+def classify_example(example,tree): 
+    question = list(tree.keys())[0]
+    feature_name, comparison_operator, value = question.split()
+    # 分析问题
+    if example[feature_name] <= float(value):
+        answer = tree[question][0]
+    else:
+        answer = tree[question][1]
+    
+    # base case
+    if not isinstance(answer,dict):
+        return answer
+    else:
+        residual_tree = answer
+        return classify_example(example,residual_tree)

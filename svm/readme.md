@@ -1,21 +1,26 @@
 ### 为什么要学习 SVM
+今天深度学习算法大大提高准确度，固然深度学习能够交给我们一张满意答卷。由于深度学习通过大量仿生神经元的设计来完成暴力方式进行学习，所以我们无法向客户解释机器是如何通过学习来解决回归和分类的问题。特别在医疗领域上，我们需要向客户解释机器是如何根据患者的报告来对患者病情进行诊断。因为深度神经
+大多情况下对于开发者是黑盒，我们无法了解机器是如何一步一步根据。这样有关人命关天的大事，客户是无法接受机器做出诊断。
+
 ![svm_1.jpeg](https://upload-images.jianshu.io/upload_images/8207483-07eef9256851521c.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-在开始最开始我们给出一个简单定义什么是 SVM(Support Vector Machine )
-,是一种机器学习算法，用于处理二分类和多分类问题。好有了这些作为基础我们就可开始今天主题 SVM。
+那么什么是 SVM 呢? SVM 是 Support Vector Machine 英文缩写，直接翻译过来就是支持向量机。SVM 是一种机器学习算法，用于处理二分类和多分类问题。SVM 是监督学习的一种。
 
-深度学习固然大大提高训练精确度，但是我们无法给客户解释机器是如何进行预测和分类的。这些在医疗上我们需要解释机器是如何根据患者的报告来对患者病情进行诊断。因为深度神经网络大多情况下对于开发者是黑盒，我们无法了解机器是如何一步一步根据。这样有关人命关天的大事，客户是无法接受机器做出诊断。
 
-我们必须给出合理解释，机器如何进行判断的，这时候 SVM 就由于深度神经网络。当下机器学习比较重要 3 中算法，个人都目前为止认为比较重要机器学习算法分别是，深度学习、SVM 和决策树。在深度学习出现之前，是 SVM 的时代 SVM 占据了机器学习算法优势地位整整 15 年。SVM 属于监督学习，并且可以解决分类和预测问题。
+![svm](https://upload-images.jianshu.io/upload_images/8207483-69ef528777c610d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-### 回顾
-### 线性方程
-这回在坐标系(特征空间)中绘制一条直线，该直线在 x 轴和 y 轴上的截距分别是 -2 和 1。我们根据这些已知条件利用初中的数学很轻松就可以计算出这条直线所对应的方程 
+SVM 、决策树和深度学习，是当下机器学习世界里 3 个比较重要的算法。早在深度学习都目前为止认为比较重要机器学习算法分别是，在深度学习出现之前，SVM 和决策树占据了机器学习。那时候是 SVM 的时代 SVM 占据了机器学习算法优势地位整整 15 年。
+
+
+我们在开始学习SVM 之前需要对一些 SVM 算法用到数学知识进行简单回顾一下。
+
+#### 介绍分割边界（超平面)
+这回在坐标系(特征空间)中绘制一条直线，该直线在 x 轴和 y 轴上的截距分别是 -2 和 1。我们根据这些已知条件，利用初中的数学就可以很轻松写出这条直线所对应的方程。 
 ![svm_02](https://upload-images.jianshu.io/upload_images/8207483-0649daadfff67562.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 $$ y = \frac{1}{2} x + 1$$
-这是我们初中时候就可计算出上面的方程
-$$ -x + 2y + 1 = 0  $$
-$$ f(x,y) = -x + 2y + 1 = 0  $$
+对等式进行简单的化简就可以得到
+$$ -x + 2y + 2 = 0  $$
+$$ f(x,y) = -x + 2y + 2 = 0  $$
 我们知道将函数等于 0  这个函数就变为一个方程，也可以使用向量的方式表示这个方程
 
 $$ f(x,y) = \left[ \begin{matrix}
@@ -23,28 +28,164 @@ $$ f(x,y) = \left[ \begin{matrix}
 \end{matrix} \right]  \left[ \begin{matrix}
     x \\
     y
-\end{matrix} \right] + 1$$
-系数就是方程的法向方向。$\vec{w} = [-1,2]^T$
+\end{matrix} \right] + 2$$
+系数 w 就是方程的法向方向，可以表示为 $\vec{w} = [-1,2]^T$
 
-w 右上角的 T 表示对向量的转置也就是行列对调，这个之前我们已经遇到过。
+w 右上角的 T 表示对向量的转置也就是行列对调，这个之前我们已经遇到过，所以上面方程就可以写成下面的式子。
 
 $$ \vec{w}^T \cdot \vec{x} + b $$
-下面不等式表示位于该直线法向方向的所有点的集合
+不少书籍上就直接写成$wx + b = 0$
+
+位于该直线法向方向的所有点的集合,带入到 wx + b 就满足下面不等式，我们通常把这些点叫正例样本
 
 $$ \vec{w}^T \cdot \vec{x} + b > 0 $$ 
 
-表示在法线反方向上的所有点集合
+位于法线反方向上的点满足下面不等式，这些点就是负例样本。
+
 $$ \vec{w}^T \cdot \vec{x} + b < 0 $$ 
-表示点位于该直线上
-$$ \vec{w}^T \cdot \vec{x} + b < 0 $$ 
+
+表示点位于该直线上，点满足下面等式
+
+$$ \vec{w}^T \cdot \vec{x} + b = 0 $$ 
+
 现在对直线进行扩展，直线上有两个特征$x_1,x_2$ 表示一条直线，而如果有三个特征$ \{ x_1,x_2,x_3 \}$ 表示空间中一个平面，如果是 N 维的话就无法通过图像来表示，那么这就是我们所说在 N维空间上超平面。其实直线和平面也是超平面。这些应该不难理解。
 
-### 如何判断数据集是线性可分
-存在一个超平面，所有特征点在这个超平面法线方向上的投影是可分的，那么这个数据集就是线性可分的。
+好了我们知道如何通过一个超平面把数据样本点分类正例样本和负例样本两类。现在我们来思考一个问题就是如何判断集合点存在一个边界线。如何判断数据集是线性可?如果存在一个超平面，所有特征点在这个超平面法线方向上的投影是可分的，那么这个数据集就是**线性可分**的。
 
+![svm_02.jpeg](https://upload-images.jianshu.io/upload_images/8207483-72fab6464568d1a4.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+在左图中我们看到在两类样本点存在无穷多个分割平面(边界平面)可以把两类样本点分离开。现在问题是我们如何选择一个最佳分割平面呢?图中有些一些线我们根据经验一看就会发现。
+![svm_03](https://upload-images.jianshu.io/upload_images/8207483-0896cf2e2195e017.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+L2 分割平面比较贴近红色方块的点，而 L2 更贴近蓝色圆圈点。这两边界都是有缺点，显然这些分割线没有良好泛化能力，我们凭借经验会发现好的分割平面应该是在中间地带，离两边样本点都尽量大。
+
+![SVM_06](https://upload-images.jianshu.io/upload_images/8207483-946c1edc5fae6a71.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+其实根据我们经验我们是大概知道什么样分割平面是最好，那么我们需要严谨地用数学语言进行描述一下什么我们想要决策平面。
+
+这个两面需要离两个数据集合点距离最大，并且分割平面到离他最近点的距离最大。在机器学习中很多问题都是最大最小的问题。这里离分割平面最近点叫作为支持向量点，他们是机器学习关键点
+![svm_07.jpg](https://upload-images.jianshu.io/upload_images/8207483-3ecd4310cb4b2530.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+#### 点到直线距离
+$$ Ax + By + C = 0$$
+$$ f(x_0,y_0) = \frac{|Ax_0 + By_0 + C|}{\sqrt{A^2 + B^2}} $$
+$$ \frac{A}{\sqrt{A^2 + B^2}} x_0 + \frac{B}{\sqrt{A^2 + B^2}} y_0 + \frac{C}{\sqrt{A^2 + B^2}}$$
+其实点到直线方程就可以写出这个样子
+$$ A\prime x_0 + B \prime y_0 + C \prime  $$
+利用我们在前面学到直线表达式，就会得到
+$$(A\prime x_0 + B \prime y_0) \cdot \left( x_0,y_0 \right)^T+ C$$
+也就是
+$$\vec{w}^T \vec{x} + b$$
+不也就是一条直线那么，也就是将点到直线的距离直线,扩展到 n 维
+$$ (w_1,w_2, \dots w_n) $$
+$$ ||w||_2 = (w_1,w_2, \dots w_n) \cdot (w_1,w_2, \dots w_n)^T$$
+
+$$ N = \{(x_1,y_1),(x_1,y_1),\dots ,(x_n,y_n) \} $$
+$$ x_i \in \mathbb{R} $$
+
+
+
+$$f(x,w,b) = 0$$ 表示直线，假设已知 w 和 b 那么我们就得到一条直线
+- 对于正例样本
+$$ \frac{w^{possive} + b }{||w||} y^{possive} $$
+- 对于负例样本
+$$ \frac{w^{negtive} + b }{||w||} y^{negtive} $$
+
+$$ \frac{w^{i} + b }{||w||} y^{i} $$
+这是所有样本到分割平面距离，我们接下来就要找距离分割平面最近点
+$$ \min_{i=1,2 \dots n} \frac{w^{i} + b }{||w||} y^{i} $$
+这是表示所有样本点到某一条直线的最近点，
+
+$$ max( \min_{i=1,2 \dots n} \frac{w_j^{i} + b_j }{||w||} y^{i} )$$
+到样本最近距离取最大，这就是 SVM 的任务。
+
+那么我们现在将问题扩展到 n 维特征空间，$W^TX + b $ 这里 W 和 X 是 n 维，
+$$d = \frac{|W^T + b|}{||w||}$$ 
+
+$$ y(x) = w^T \Phi(x) + b $$
+这里解释一下$\Phi$ 主要是集合一种映射
+$$ (x_1,x_2,x_3) \Rightarrow (1,x_1,x_2,x_3,x_1^2,x_2^2,x_3^2,x_1x_2,x_2x_1,x_3x_1,x_3x_2)$$
+将原始特征通过$\Phi$就变成了更多的特征，对数据的特征进行可能特征映射。做一阶$\Phi$
+求解分割平面问题其实就是凸二次规划问题
+
+### 推导目标函数
+$$ y(x) = w^T \Phi(x) + b$$
+$$ \begin{cases}
+    f(x_i) > 0 \Leftrightarrow y_i = 1 \\
+    f(x_i) < 0 \Leftrightarrow y_i = -1 
+\end{cases} \Leftrightarrow y_i f(x_i) > 0$$
+
+$$ \frac{y_i \dot f(x_i)}{||w||} = \frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{||w||}$$
+
+### 目标函数
+
+$$ \arg max_{w,b} \{ \frac{1}{||w||} \min_i [y_i \dot (w^T \dot \Phi(x_i) + b)]  \}$$
+我们需要求 w 和 b 来满足上面目标函数，怎么优化是比较麻烦，
+- $w = (w_1,w_2, \dots w_k)$
+- $||w|| = (w_1,w_2, \dots w_k)(w_1,w_2, \dots w_k)^T$
+#### 化简目标函数
+其实我们这些支持向量点到分割平面一定是一个参数假设是 C 那么他们距离表示是将这些支持向量点带入上面点到直线方程
+$$\frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{||w||} = C$$
+$$\frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{C||w||} = 1$$
+w 向量乘上常数是没有变化的。等比例缩放 w 总是可以办到。
+$$|y \ge 1|$$
+$$ y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1$$
+$$ \arg \max_{w,b} \frac{1}{||w||} $$
+$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+
+$$ \max_{w,b} \frac{1}{||w||} $$
+$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+
+$$  \min_{w,b} \frac{1}{2}||w||^2 $$
+$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+#### 
+目标函数是有约束，有 N 样本个数，那么我们有 N 个约束，这就是我们变化为，在约束条件下求最小，拉格朗日乘子法
+$$ \min f(x) = $$
+$$ \begin{cases}
+    f_1(x) \le 0 \\
+    f_1(x) \le 0 \\
+    f_1(x) \le 0 \\
+    f_1(x) \le 0 
+\end{cases}$$
+$$ \begin{cases}
+    h_1(x) = 0 \\
+    h_1(x) = 0 \\
+    h_1(x) = 0 \\
+    h_1(x) = 0 
+\end{cases}$$
+所有约束条件，
+
+$$ \mu_1 \ge 0 \mu_2 \ge 0 \cdots \mu_n \ge 0 $$
+
+$$ G(x,\vec{\mu},\vec{\lambda}) = f(x) + \sum_{i=1}^n \mu_i f_i(x) + \sum_{j=1}^m \lambda h_j(x) $$
 
 #### 支持向量点
+在这里我们尝试用一种思维来解释什么是支持向量点，（下图）不难看出穿过支持向量点超平面是平行于分割平面的。根据线性变化我们可以进行一些假设。假设分割平面的 w 就是由这些距离分割平面的点的乘上系数而得，因为 x 维度和 w 维度是一样，可以想象
+$$\vec{w} = \sum_{i=1}^k \alpha x^{support vector}$$
 ![支持向量点](https://upload-images.jianshu.io/upload_images/8207483-82559b74d67dc3ac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+我们将支持向量点的间距离称为间隔，在间隔区域没有任何数据点，可以将其想象一个安全地带，我们尽量找到让间隔最大（安全地带）的分割平面。
+
+- 向量 $\vec{w} = [w_1,w_2,\dots]$ 是分割超平面的法线方向
+- $wx + b = 0$ 和 $wx' + b = 0 \Rightarrow w(x' - x ) = 0$ 正交
+- $
+
+$$c(x,y,f(x)) = \begin{cases}
+    0, & y*f(x) \ge 1 \\
+    1-y*f(x) & 
+\end{cases}$$
+目标函数
+$$ min_w \lambda ||w||^2 + \sum_{i=1}^n (1 - y_i(x_i,w))_{+} $$
+
+As you can see our objective of a SVM consists of two terms,The first term is a regularizer, the heart of SVM the second term the loss.The regularizer balances between margin maximization and loss, we want to find the decision surface that is maximally for away from any data points
+
+$$ \frac{\partial }{\partial W_k} \lambda ||w||^2 = 2 \lambda W_k$$
+$$ \frac{\partial}{\partial W_k} (1 - y_i(x_i,w))_{+} = \begin{cases}
+    0 \\
+    -y_i x_{ik} 
+\end{cases} $$
+
+$$ w = w + \eta(y_i x_i - 2 \lambda w) $$
 
 我们假设一个方程为 $f(x) = \vec{w}^T  \vec{x} + b $ 为了方便以后我们简化写完$f(x) = wx + b$ 不少书籍上也是这么写的。
 
@@ -68,7 +209,10 @@ $$ \vec{w}^T \cdot \vec{x} + b < 0 $$ 
 ![svm_01.png](https://upload-images.jianshu.io/upload_images/8207483-e812b58deb8c85b0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 - $ \vec{w} \cdot \vec{b} - b = 0 $ 就是对应于**决策边界**
 -  支持向量 $ d_1, d_2, d_3 $ 也就是支持向量机点到决策边界距离要小于其他样本点到决策边界的距离。
-
+#### 点到直线距离
+$$ Ax + By + C = 0$$
+$$ f(x_0,y_0) = \frac{|Ax_0 + By_0 + C|}{\sqrt{A^2 + B^2}} $$
+$$ \frac{A}{\sqrt{A^2 + B^2}} x_0 + \frac{B}{\sqrt{A^2 + B^2}} y_0 + \frac{C}{\sqrt{A^2 + B^2}}$$
 
 ### 目标和原理
 

@@ -89,7 +89,7 @@ $$ \frac{x^k}{k!} \cdot e^{-x} \rightarrow  \frac{\lambda^k}{k!} \cdot e^{-\lamb
 $$ P{X = k} = \frac{\lambda^k}{k!} e^{-\lambda} , k = 0,1,2, \cdots , \lambda > 0$$
 则有
 $$ E(X) = \sum_{k=0}^{\infty} k \cdot \frac{\lambda^k}{k!} e^{-\lambda} = e^{\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} \cdot \lambda = \lambda e^{} $$
-#### 均匀分布
+#### 均匀分布(uniform distrubtion)
 概率密度函数
 $$ f_x(x) = \begin{cases}
     \frac{1}{b-a} & a \le x \le b \\
@@ -102,14 +102,30 @@ $$F_x(x) = \int_{-\infty}^x f_x(u)du = \begin{cases}
     \frac{x - a}{b - a} & a < x \le b \\
     1 & x > b 
 \end{cases}$$
-#### 指数分布
+#### 指数分布(exponential)
+PDF
+$$f_x(x) = \begin{cases}
+    \lambda e^{- \lambda x} & x \ge 0 \\
+    0 & otherwise
+\end{cases} $$
+分布是由$\lambda$ 来决定
+CDF：
+$$ -If x \ge 0 $$
+$$ F_x(x) = \int_{-\infty}^x f_x(u)du = \int_0^x \lambda e^{\lambda u} du $$
+$$ = -  \int_0^x e^{- \lambda u}d(- \lambda u)$$
+$$ = - \left[ e^{-\lambda u} \right]_0^x$$
+$$ = 1 - e^{-\lambda x}$$
 
 $$ f(x) = \begin{cases}
     \frac{1}{\theta} e^{-\frac{x}{\theta}} & x > 0 \\
     0 & x \le 0
 \end{cases} $$
 ##### 指数分布的无记忆性
-
+#### Erlang 伽马概率分布
+PDF $$f(x) = \begin{cases}
+    \frac{}{}
+\end{cases}$$
+CDF $$  $$
 #### 正态分布
 
 
