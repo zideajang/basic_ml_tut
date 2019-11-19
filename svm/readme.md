@@ -67,17 +67,18 @@ L2 分割平面比较贴近红色方块的点，而 L2 更贴近蓝色圆圈点�
 ![svm_07.jpg](https://upload-images.jianshu.io/upload_images/8207483-3ecd4310cb4b2530.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 #### 点到直线距离
-$$ Ax + By + C = 0$$
+这里我们来看一看点$(x_0,y_0)$到$ Ax + By + C = 0$直线的距离，点到直线距离公式是不是初中的知识点已经不记得了。
+
 $$ f(x_0,y_0) = \frac{|Ax_0 + By_0 + C|}{\sqrt{A^2 + B^2}} $$
+对公式进行化简，
 $$ \frac{A}{\sqrt{A^2 + B^2}} x_0 + \frac{B}{\sqrt{A^2 + B^2}} y_0 + \frac{C}{\sqrt{A^2 + B^2}}$$
 其实点到直线方程就可以写出这个样子
 $$ A\prime x_0 + B \prime y_0 + C \prime  $$
 利用我们在前面学到直线表达式，就会得到
-$$(A\prime x_0 + B \prime y_0) \cdot \left( x_0,y_0 \right)^T+ C$$
-也就是
-$$\vec{w}^T \vec{x} + b$$
-不也就是一条直线那么，也就是将点到直线的距离直线,扩展到 n 维
+$$(A\prime  + B \prime ) \cdot \left( x_0,y_0 \right)^T+ C$$
+也就是 $\vec{w}^T \vec{x} + b$，不也就是一条直线那么，也就是将点到直线的距离直线，扩展到 n 维，w 为直线法线的方向然后我们对 
 $$ (w_1,w_2, \dots w_n) $$
+向量的模如下
 $$ ||w||_2 = (w_1,w_2, \dots w_n) \cdot (w_1,w_2, \dots w_n)^T$$
 
 $$ N = \{(x_1,y_1),(x_1,y_1),\dots ,(x_n,y_n) \} $$
@@ -86,79 +87,97 @@ $$ x_i \in \mathbb{R} $$
 
 
 $$f(x,w,b) = 0$$ 表示直线，假设已知 w 和 b 那么我们就得到一条直线
-- 对于正例样本
-$$ \frac{w^{possive} + b }{||w||} y^{possive} $$
-- 对于负例样本
-$$ \frac{w^{negtive} + b }{||w||} y^{negtive} $$
+- 对于正例样本，对于所有正例样本其标签为 $y^{possive}$ 为 1，所以整数距离乘以 1 为整数
+$$ \frac{w^{possive} x + b }{||w||} y^{possive} $$
+- 对于负例样本，对于所有正例样本其标签为 $y^{negtive}$ 为 -1，所以负整数距离乘以 -1 为正整数。
+$$ \frac{w^{negtive} x + b }{||w||} y^{negtive} $$
 
-$$ \frac{w^{i} + b }{||w||} y^{i} $$
+$$ \frac{w x^{i} + b }{||w||} y^{i} $$
 这是所有样本到分割平面距离，我们接下来就要找距离分割平面最近点
-$$ \min_{i=1,2 \dots n} \frac{w^{i} + b }{||w||} y^{i} $$
-这是表示所有样本点到某一条直线的最近点，
+$$ \min_{i=1,2 \dots n} \frac{w x^{i} + b }{||w||} y^{i} $$
+这是表示所有样本点$（x_i,y_i）$到某一条直线$f(w_j,b_j)$的最近点，
 
-$$ max( \min_{i=1,2 \dots n} \frac{w_j^{i} + b_j }{||w||} y^{i} )$$
-到样本最近距离取最大，这就是 SVM 的任务。
+$$ max( \min_{i=1,2 \dots n} \frac{w_j x_{i} + b_j }{||w||} y^{i} )$$
+到样本最近距离取最大，这就是 SVM 的任务。我们现在用数学公式表达了 SVM 的任务，就是找到距离分割平面点的间隔最大值。
 
 那么我们现在将问题扩展到 n 维特征空间，$W^TX + b $ 这里 W 和 X 是 n 维，
 $$d = \frac{|W^T + b|}{||w||}$$ 
 
 $$ y(x) = w^T \Phi(x) + b $$
-这里解释一下$\Phi$ 主要是集合一种映射
-$$ (x_1,x_2,x_3) \Rightarrow (1,x_1,x_2,x_3,x_1^2,x_2^2,x_3^2,x_1x_2,x_2x_1,x_3x_1,x_3x_2)$$
-将原始特征通过$\Phi$就变成了更多的特征，对数据的特征进行可能特征映射。做一阶$\Phi$
+这里解释一下$\Phi$ 主要是样本的特征一种映射，将样本$x^i$ 的 $ (x_1,x_2,x_3) $ 三维特征映射到下面多维特征向量
+$$ \Rightarrow (1,x_1,x_2,x_3,x_1^2,x_2^2,x_3^2,x_1x_2,x_2x_1,x_3x_1,x_3x_2)$$
+将原始特征通过$\Phi$就变成了更多的特征，对数据的特征进行可能特征映射。做一阶$\Phi$ 就是特征向量本身。
 求解分割平面问题其实就是凸二次规划问题
 
 ### 推导目标函数
 $$ y(x) = w^T \Phi(x) + b$$
+其中y(x) 表示第i样本估计值，我们知道位于分割面法线方法为y(x)为正那么其真实值为1 ,f(x) 和 y 相乘为正，反之亦然。
 $$ \begin{cases}
     f(x_i) > 0 \Leftrightarrow y_i = 1 \\
-    f(x_i) < 0 \Leftrightarrow y_i = -1 
+    f(x_i) < 0 \Leftrightarrow y_i = -1 
 \end{cases} \Leftrightarrow y_i f(x_i) > 0$$
+下面是点到直线距离公式
+$$ \frac{y_i \cdot f(x_i)}{||w||} = \frac{y_i \cdot (w^T \cdot \Phi(x_i) + b)}{||w||}$$
 
-$$ \frac{y_i \dot f(x_i)}{||w||} = \frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{||w||}$$
-
-### 目标函数
-
-$$ \arg max_{w,b} \{ \frac{1}{||w||} \min_i [y_i \dot (w^T \dot \Phi(x_i) + b)]  \}$$
+下面公式 arg 表示对于$y_i \cdot (w^T \cdot \Phi(x_i) + b)$ 这样距离对所有点求最近在求最远。
+$$ arg \max_{w,b} \{  \min_i \frac{1}{||w||}[y_i \cdot (w^T \cdot \Phi(x_i) + b)]  \}$$
+$$ arg \max_{w,b} \{ \frac{1}{||w||} \min_i [y_i \cdot (w^T \cdot \Phi(x_i) + b)]  \}$$
 我们需要求 w 和 b 来满足上面目标函数，怎么优化是比较麻烦，
 - $w = (w_1,w_2, \dots w_k)$
 - $||w|| = (w_1,w_2, \dots w_k)(w_1,w_2, \dots w_k)^T$
 #### 化简目标函数
-其实我们这些支持向量点到分割平面一定是一个参数假设是 C 那么他们距离表示是将这些支持向量点带入上面点到直线方程
-$$\frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{||w||} = C$$
-$$\frac{y_i \dot (w^T \dot \Phi(x_i) + b)}{C||w||} = 1$$
-w 向量乘上常数是没有变化的。等比例缩放 w 总是可以办到。
-$$|y \ge 1|$$
-$$ y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1$$
+其实我们这些支持向量点到分割平面一定是一个参数假设是 C 那么他们距离表示是将这些支持向量点带入上面点到直线方程，因为可以对直线做线性变换除以一个常量 C 
+$$\frac{y_i  (w^T  \Phi(x_i) + b)}{||w||} = C$$
+$$\frac{y_i  (w^T  \Phi(x_i) + b)}{C||w||} = 1$$
+w 向量乘上常数 C 后方程是没有变化的。等比例缩放 w 总是可以办到。就可以将距离直线距离取 1。
+总可以通过等比缩放w方法，使得函数值满足 $|y \ge 1|$
+$$ y_i  (W^T  \Phi(x_i) + b ) \ge 1$$
+如果满足上面条件那么$ y_i  (W^T  \Phi(x_i) + b ) $最小值就是 1 将 1 带入上面方程
 $$ \arg \max_{w,b} \frac{1}{||w||} $$
-$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+$$ s.t. y_i  (W^T  \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
 
 $$ \max_{w,b} \frac{1}{||w||} $$
-$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+$$ s.t. y_i  (W^T \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
 
-$$  \min_{w,b} \frac{1}{2}||w||^2 $$
-$$ s.t. y_i \cdot (W^T \dot \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+$ \max_{w,b} \frac{1}{||w||} $ 就等价于 $ \min_{w,b} ||w||^2 $
+
+$$ \Rightarrow \min_{w,b} \frac{1}{2}||w||^2 $$
+$$ s.t. y_i  (W^T  \Phi(x_i) + b ) \ge 1 , i = 1,2, \cdots , n $$
+
+
 #### 
 目标函数是有约束，有 N 样本个数，那么我们有 N 个约束，这就是我们变化为，在约束条件下求最小，拉格朗日乘子法
-$$ \min f(x) = $$
+$$ \min f(x) = $$ 是在约束条件下，我们可以将所有约束条件转化小于 0  如下，如果不是小于 0 就在不等式两边取负号如果没有等于 0 我们就追加等式条件。那么我们的约束条件就转化为有 n 小于 0 的和 m 个等于 0 的约束条件。
 $$ \begin{cases}
     f_1(x) \le 0 \\
-    f_1(x) \le 0 \\
-    f_1(x) \le 0 \\
-    f_1(x) \le 0 
+    f_2(x) \le 0 \\
+    \cdots \\
+    f_n(x) \le 0 
 \end{cases}$$
 $$ \begin{cases}
     h_1(x) = 0 \\
-    h_1(x) = 0 \\
-    h_1(x) = 0 \\
-    h_1(x) = 0 
+    h_2(x) = 0 \\
+    \cdots \\
+    h_m(x) = 0 
 \end{cases}$$
 所有约束条件，
 
 $$ \mu_1 \ge 0 \mu_2 \ge 0 \cdots \mu_n \ge 0 $$
+$$ \lambda_1 = 0,\lambda_2 = 0 \dots \lambda_m = 0 $$
+通过在原始函数f(x) 添加乘子$\sum_{i=1}^n \mu_i f_i(x)$和$\sum_{j=1}^m \lambda_j h_j(x)$我们就得到了拉格朗日函数，
+$$ G(x,\vec{\mu},\vec{\lambda}) = f(x) + \sum_{i=1}^n \mu_i f_i(x) + \sum_{j=1}^m \lambda_j h_j(x) $$
 
-$$ G(x,\vec{\mu},\vec{\lambda}) = f(x) + \sum_{i=1}^n \mu_i f_i(x) + \sum_{j=1}^m \lambda h_j(x) $$
+![屏幕快照 2019-11-20 上午5.19.18.png](https://upload-images.jianshu.io/upload_images/8207483-0c096452bd22b7e4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+我们可以将方程进行变化理解有关$\mu_i$ 的线性方程，将$\mu_i$移动方程一边其他项看做方程的常数项就可以得到线性方程，因为$\mu$ 是一元线性的，假设上图L1,L2,L3 分别都是 $\mu$ 的线性方程。然后将min(l1,L2,L2) 取最小值点拦截后就得到一个凸函数(浅红线表示)。凹函数存在局部最大值也就是全局最大值。max min(l1,l2,...ln) 
+$$ G(x,\vec{\mu},\vec{\lambda}) = f(x) + \sum_{i=1}^n \mu_i f_i(x) + \sum_{j=1}^m \lambda_j h_j(x) $$
+$$s.t. f_i(x) \le 0 h_j(x) = 0$$
+我们考虑一下要是对其$ max_{\mu,\lambda,\mu_i \ge 0} G(x,\vec{\mu},\vec{\lambda})$
+因为$\mu_i \ge 0 $ 乘以 $f_i(x) \le 0 $ 一定是一个负数，因为$h_j(x) = 0$,那么我们就得到$ \max_{\mu,\lambda,\mu_i \ge 0} G(x,\vec{\mu},\vec{\lambda}) = f(x)$
+那么我么原始问题求$\min f(x)$ 就变成了
+$$ \min_x (\max_{\mu,\lambda,\mu_i \ge 0} G(x,\vec{\mu},\vec{\lambda})) $$
+
+$$ \max_{\mu,\lambda,\mu_i \ge 0} (\min_x G(x,\vec{\mu},\vec{\lambda})) $$
 #### 支持向量点
 在这里我们尝试用一种思维来解释什么是支持向量点，（下图）不难看出穿过支持向量点超平面是平行于分割平面的。根据线性变化我们可以进行一些假设。假设分割平面的 w 就是由这些距离分割平面的点的乘上系数而得，因为 x 维度和 w 维度是一样，可以想象
 $$\vec{w} = \sum_{i=1}^k \alpha x^{support vector}$$
@@ -166,7 +185,7 @@ $$\vec{w} = \sum_{i=1}^k \alpha x^{support vector}$$
 
 我们将支持向量点的间距离称为间隔，在间隔区域没有任何数据点，可以将其想象一个安全地带，我们尽量找到让间隔最大（安全地带）的分割平面。
 
-- 向量 $\vec{w} = [w_1,w_2,\dots]$ 是分割超平面的法线方向
+- 向量 $\vec{w} = [w_1,ws]$ 是分割超平面的法线方向
 - $wx + b = 0$ 和 $wx' + b = 0 \Rightarrow w(x' - x ) = 0$ 正交
 - $
 
