@@ -1,0 +1,23 @@
+(function(){
+    //https://j.517.cn/bbsid,446721?spm=a2o5t.13195151.0.0.12c7Y2GgY2Ggmw
+    try{
+        dd.biz.navigation.close({
+            onSuccess : function(result) {
+            },
+            onFail : function(err) {}
+        })
+    }catch(e){
+        alert(e)
+    }
+    //j.517.cn/bbsid,446721
+    // location.href = "dingtalk://misclient/action/page?pageid=j.517.cn&params=bbsid,446721";
+    // location.href = "dingtalk://misclient/action/openimageupdate?mapid=884444&classid=1";
+
+    // location
+
+    var urlParams = new URL(location.href);
+    alert( urlParams.searchParams.get("pageId"))
+    
+    // location.href = "dingtalk://misclient/action/page?pageid=j.517.cn&params=bbsid,446721";
+    
+})();
