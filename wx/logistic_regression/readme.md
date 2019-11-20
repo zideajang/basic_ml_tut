@@ -22,5 +22,19 @@ $$  p = \frac{1}{e^{-z}+1}$$
 
 同时满足这两个限制条件的最优化问题称为**凸优化问题**，这类问题有一个非常好性质，那就是局部最优解一定是全局最优解。接下来我们先介绍**凸集**和**凸函数**的概念。
 $$\theta x + (1 - \theta) y \in \mathbb{C}$$
-
+![](https://github.com/zideajang/basic_ml_tut/blob/master/wx/logistic_regression/screenshots/context_1.JPG)
 则称该集合称为凸集。如果把这个集合画出来，其边界是凸的，没有凹进去的地方。直观来看，把该集合中的任意两点用直线连起来，直线上的点都属于该集合。相应的，点：
+
+$$ f(\theta x + (1 - \theta y)) \le f(\theta x) + f((1 - \theta) y)$$
+
+
+$$ f(x,y,z) = 2x^2 - xy + y^2 - 3z^2$$
+
+$$ \left[ 
+ \begin{matrix}
+    \frac{\partial^2f}{\partial x^2} && \frac{\partial^2f}{\partial x \partial y} && \frac{\partial^2f}{\partial x \partial z} \\
+    \frac{\partial^2f}{\partial y \partial x } && \frac{\partial^2f}{\partial y^2 } && \frac{\partial^2f}{\partial y \partial z} \\
+    \frac{\partial^2f}{\partial z \partial x} && \frac{\partial^2f}{\partial z \partial y} && \frac{\partial^2f}{\partial z^2}
+\end{matrix} 
+\right]
+$$
