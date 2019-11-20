@@ -75,7 +75,113 @@ $$ \frac{\partial(x,y)}{\partial y \partial y} = 6$$
 
 
 ### 泰勒公式和拉格朗日公式(Maclaurin 公式)
+$$ e^x =  1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots + \frac{x^k}{k!} + R_k$$
 
+$$ 1 =  1 \cdot e^{-x}  + x \cdot e^{-x} + \frac{x^2}{2!}\cdot e^{-x}  + \frac{x^3}{3!} \cdot e^{-x} + \cdots + \frac{x^k}{k!} \cdot e^{-x}  + R_k \cdot e^{-x} $$
+
+$$ \frac{x^k}{k!} \cdot e^{-x} \rightarrow  \frac{\lambda^k}{k!} \cdot e^{-\lambda} $$
+
+如果将 X 看做一个常数项，而将 k 看做我们研究对象那么，而且保证加和为 
+#### 泊松分布
+这样东西也是就大家熟悉泊松分布
+假设$X \approx \pi(\lambda)$ 且分布律为泊松分布
+
+$$ P{X = k} = \frac{\lambda^k}{k!} e^{-\lambda} , k = 0,1,2, \cdots , \lambda > 0$$
+则有
+$$ E(X) = \sum_{k=0}^{\infty} k \cdot \frac{\lambda^k}{k!} e^{-\lambda} = e^{\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} \cdot \lambda = \lambda e^{} $$
+#### 均匀分布(uniform distrubtion)
+概率密度函数
+$$ f_x(x) = \begin{cases}
+    \frac{1}{b-a} & a \le x \le b \\
+    0 & otherwise
+\end{cases} $$
+
+CDF
+$$F_x(x) = \int_{-\infty}^x f_x(u)du = \begin{cases}
+    0 & x \le a \\
+    \frac{x - a}{b - a} & a < x \le b \\
+    1 & x > b 
+\end{cases}$$
+#### 指数分布(exponential)
+PDF
+$$f_x(x) = \begin{cases}
+    \lambda e^{- \lambda x} & x \ge 0 \\
+    0 & otherwise
+\end{cases} $$
+分布是由$\lambda$ 来决定
+CDF：
+$$ -If x \ge 0 $$
+$$ F_x(x) = \int_{-\infty}^x f_x(u)du = \int_0^x \lambda e^{\lambda u} du $$
+$$ = -  \int_0^x e^{- \lambda u}d(- \lambda u)$$
+$$ = - \left[ e^{-\lambda u} \right]_0^x$$
+$$ = 1 - e^{-\lambda x}$$
+
+$$ f(x) = \begin{cases}
+    \frac{1}{\theta} e^{-\frac{x}{\theta}} & x > 0 \\
+    0 & x \le 0
+\end{cases} $$
+##### 指数分布的无记忆性
+#### Erlang 伽马概率分布
+PDF $$f(x) = \begin{cases}
+    \frac{}{}
+\end{cases}$$
+CDF $$  $$
+#### 正态分布
+
+
+## 概率
+## 分布
+
+### 两点分布(伯努利分布)
+设随机变量 X 服从
+| X  |  1 | 0|
+|---|---|---|
+|  P |  p | 1-p|
+期望
+$$ E(X) = 1 \cdot p + 0 \cdot q = p $$
+方差
+$$ D(X) = E(X^2) - [E(X)]^2$$
+$$ = 1^2 \cdot p + 0^2 \cdot (1 - p) - p^2 = p(1-p) = pq$$
+### 二项分布
+可以看做若干个两点分布的取和，设随机变量 X 服从参数为 n,p 二项分布, 假设 $X_i$ 为第 i 次试验中事件 A 发生的次数，$i=1,2,\cdots , n$
+$$ X = \sum_{i=1}^n X_i$$
+显然，$X_i$相互独立均服从参数为 p 的 0-1 分布所以
+$$ E(X) = \sum_{i=1}^n E(X_i) = np$$
+$$ D(X) = \sum_{i=1}^n D(X_i)= np(1-p)$$
+在做分类问题，将样本为样本有
+
+我们假设有样本,有些样本是正例有些样本是负例。取 1 概率 p 取 0 概率为 0 
+$$ X = \begin{cases}
+    p & 1 \\
+    1 - p & 0
+\end{cases} $$
+
+$$ X \{ (x_1,y_1),(x_2,y_2),\cdots,(x_m,y_m) \}$$
+这里有 m 个样本，其中$y \in \{0,1\}$ 也就是样本类别为，其实这就是 m 次试样的两点分布。拿出其中一个 $x_i$ 
+
+$$ = p^1 \cdot (1-p)^{(1 -0)} \tag{1}$$
+这是两个分布统一
+$$ = p^{y_i} \cdot (1-p)^{(1 -y_i)} \tag{2}$$
+如果假设$x_i$ 样本具有 n 维 $(x_{i1},x_{i2},\dots,x_{in})$
+| $x^{i}$  | $\theta_1$  |$\theta_1$  | $\cdots$ |$\theta_n$  |
+|---|---|---|---|---|
+| $x^{(1)}$  | $x_1^1$  |  $x_2^1$ | $\cdots$ | $x_n^1$|
+| $x^{(2)}$  | $x_1^2$  |  $x_2^2$ | $\cdots$ | $x_n^2$|
+| $x^{(n)}$  | $x_1^n$  |  $x_2^n$ | $\cdots$ | $x_n^n$|
+
+
+$$\vec{\theta} \cdot \vec{x_i}$$
+然后将上面式子导入$\frac{1}{1+ e^{-x}}$ 这个公式大家再熟悉不过我们在做逻辑回归时候看到sigmoid 公式。
+$$p = \frac{1}{1+ e^{-(\vec{\theta} \cdot \vec{x_i})}} \tag{3}$$
+把这个概率带入上面(2)式里我们就得到关于$\theta$的目标函数，当这个目标函数最大时候哪个$\theta$就是我们要找参数，也就是给定目标函数一种手段。
+
+例如电影会有许多主题例如奇幻、动作、奇幻
+
+### 协方差的上限
+$$ Var(X) =  $$
+
+### 中心极限定理
+假设随机变量$X_1,X_2, \dots , X_n , \dots $ 相互独立，服从同一分布，
 
 
 $$ f(x) = \frac{f(x_0)}{0!} + \frac{f \prime (x_0)}{1!}(x - x_0) +  \frac{f \prime \prime (x_0)}{2!}(x - x_0)^2 + \cdots + \frac{f^{(n)}(x_0)}{n!}(x - x_0)^n  + R_n(x)$$

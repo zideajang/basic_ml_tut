@@ -33,6 +33,26 @@ def demo_two():
     plt.grid(True)
     plt.show()
 
+def calc_e_small(x):
+    n = 10
+    f = np.arange(1,n+1).cumprod()
+    b = np.array([x]*n).cumprod()
+    return np.sum(b/f) + 1
+
+def calc_e(x):
+    reverse = False
+    if x < 0:
+        x = -x
+        reverse = True
+    ln2 = 0.6931471805599453
+    c = x/ln2
+    a = int(c + 0.5)
+    b = x - a*ln2
+    y = (2**a) *
+
+def demo_three():
+    
+
 def run():
     demo_two()
 
