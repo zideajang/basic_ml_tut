@@ -101,21 +101,38 @@ def draw_line_2():
     plt.ylabel('draw line 2')
 
 '''
-For every x, y pair of arguments, there is an optional third argument 
-which is the format string that indicates the color and line type of the plot. 
-he letters and symbols of the format string are from MATLAB, and you concatenate 
-a color string with a line style string. The default format string is 'b-', 
-which is a solid blue line. 
-For example, to plot the above with red circles, you would issue
-对于每个 x，y 参数对，都有一个可选的第三个参数，它是表示绘图颜色和线型的格式字符串。
-格式字符串的字母和符号来自MATLAB，您可以将颜色字符串与线条样式字符串连接起来。
-默认格式字符串为“b-”，这是一条蓝色实线。例如，要用红色圆圈绘制上述内容，您可以
+plot 前两个参数对应于每个点的 x，y , 而第三个参数是可选的，是表示绘图颜色和线型。
+使用的字母和符号来自 MATLAB，可以将表示颜色与线条样式的文字连接起来使用。
+默认格式为 "b-"，表示一条蓝色实线。例如，要用红色圆圈绘制上述内容，您可以
 '''
 
 def draw_points():
     plt.plot([1, 2, 3, 4], [1, 4, 9, 16], 'ro')
     plt.axis([0, 6, 0, 20])
+def draw_points_2():
+    t = np.arange(0., 5., 0.2)
+
+    # 红色虚线, 蓝色方块和绿色三角形
+    plt.plot(t, t, 'r--', t, t**2, 'bs', t, t**3, 'g^')
+    plt.show()
 # D:\ml\basic_ml_tut\matplotlib_tut\screenshots
+'''
+有些情况下，数据的格式允许您使用字符串访问特定变量。例如，使用 numpy.recarray 或 pandas.DataFrame。
+Matplotlib 允许您使用data关键字参数提供这样的对象。如果提供，则可以使用与这些变量对应的字符串生成绘图。
+'''
+
+def draw_points_3():
+    data = {'a': np.arange(50),
+        'c': np.random.randint(0, 50, 50),
+        'd': np.random.randn(50)}
+    data['b'] = data['a'] + 10 * np.random.randn(50)
+    data['d'] = np.abs(data['d']) * 100
+
+    plt.scatter('a', 'b', c='c', s='d', data=data)
+    plt.xlabel('entry a')
+    plt.ylabel('entry b')
+    plt.show()
+
 if __name__ == "__main__":
-    draw_points()
+    draw_points_3()
     plt.show()
