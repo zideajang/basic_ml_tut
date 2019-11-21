@@ -74,12 +74,21 @@ $$\min_w \frac{||w||^2}{w}$$
 $g(x,y)=c$
 虚线可以看成等高线 ，等高线，极限值，一直扩展到就是我们需要，在几何上意义上相切的。红色向量刚好垂直向量，必须共线，
 
+
+
 $$\begin{cases}
     \min f(x,y) \\
     g(x,y) = c
 \end{cases}$$
 
 $$L(x,y) = f(x,y) + \lambda (g(x,y) - c)$$
+$$\nabla L = \nabla (f + \lambda (g-c))$$
+$$\begin{aligned}
+    \nabla L = \nabla (f + \lambda (g-c)) \\
+    = \nabla f + \lambda \nabla g = 0 \\
+    \nabla f = - \lambda \nabla g
+\end{aligned}$$
+KKT
 
 $$L(w,b,a) = \frac{1}{2} ||w||^2 - \sum_{i=1}^n \alpha_i(y_i(w^Tx_i + b) -1)$$
 KKT 乘子法
