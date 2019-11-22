@@ -17,12 +17,10 @@ def create_figure_with_title():
 
 '''
 Matplotlib is the whole package and matplotlib.pyplot is a module in Matplotlib.
-
 For functions in the pyplot module, there is always a "current" figure and axes 
 (which is created automatically on request). 
 在下面示例中先调用 plt.plot 创建坐标轴，然后调用 plt.plot 绘制曲线
 plt.xlabel, plt.ylabel, plt.title 和 plt.legend set the axes labels and title
- and add a legend.
 '''
 
 def simple_plot():
