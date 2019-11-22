@@ -54,10 +54,18 @@ $$\vec{v} \cdot \vec{x} + b$$
 w 平面的法向量也就是与分割平面垂直的向量，
 $$\begin{aligned}
     w_0x_1 + b_1 = 0 \\
-    w_0x_2 - b_2 = 0 
+    w_0x_2 + b_2 = 0 
 \end{aligned}$$
 
-因为这两条直线具有相同斜率，
+因为这两条直线是平行的所以他们法向量是相同。所以上面在表示两条直线方程表示法向法向都使用w0，但是他们截距不同所以使用b1 和 b2 表示。
+
+我们假设分割平面方程为$wx+b=0$ 那么通过向两侧分类平移可可以得到
+
+$$\begin{cases}
+    wx + b = C \\
+    wx + b = -C
+\end{cases}$$
+这里两边除以 C 不会影响方程形状就会得到 这样方程
 $$ \begin{aligned}
     wx+b = -1 \\
     wx+b = 1
@@ -67,7 +75,13 @@ $$ \begin{aligned}
     wx_1+b = -1 \\
     wx_2+b = 1
 \end{aligned} $$
-
+用 d 表示两个支撑平面间距离，将上面两个方程相减就得到
+$$w \cdot (x_1 - x_2) = 2$$
+然后两边同时取绝对值，那么根据之前复习内积公式我们就得到
+$$||w|| \cdot ||x_1 - x_2|| \cos \theta = 2 $$
+我们知道$x_1 - x_2$就是从$x_1$指向$x_2$的一个向量。那么这里$\theta$ 就是这个$x_1 - x_2$表示向量和$\vec{w}$的夹角。所以就得到了下面等式
+$$  ||x_1 - x_2|| \cos \theta = d$$
+下面列出一下推导过程，
 $$
     \begin{aligned}
         w \cdot (x_1 - x_2) = 2 \\
@@ -76,8 +90,24 @@ $$
         d = \frac{2}{||w||}
     \end{aligned}
 $$
-
 ### 转化为凸优化问题
+$$
+\begin{cases}
+    w \cdot x_i + b \ge 1 & y_i = 1 \\
+    w \cdot x_i + b \le 1 & y_i = -1 
+\end{cases}
+$$
+那么也就是我们在上面约束条件下求下面极值问题
+$$ d = \frac{2}{||w||}$$
+
+，不过看起来条件有些琐碎，表达起来不方便，我们对其进行调整，我们可以利用一下在逻辑回归时候小技巧通过在不等式两边乘以对应$Y_i$
+
+$$\begin{aligned}
+    \min_w \frac{||w||^2}{2} \\
+    s.t. & y_i(w \cdot x_i + b) \ge 1, & i =1,2, \cdots , N 
+\end{aligned}$$
+
+
 在许多书都有凸函数和凹函数来进行，所以有关凸函数和凹函数有必要给大家分享
 - 凸函数
 $$ \theta x_1 + (1 - \theta) x_2  $$
@@ -85,21 +115,7 @@ $$ \theta x_1 + (1 - \theta) x_2  $$
 $$ f() $$
 - 凹函数
 
-$$
-\begin{cases}
-    w \cdot x_i + b \ge 1 & y_i = 1 \\
-    w \cdot x_i + b \le 1 & y_i = -1 
-\end{cases}
-$$
 
-$$ d = \frac{2}{||w||}$$
-
-如果我们要数学上表示出这些表达式就有上面
-
-$$\begin{aligned}
-    \min_w \frac{||w||^2}{2} \\
-    s.t. & y_i(w \cdot x_i + b) \ge 1, & i =1,2, \cdots , N 
-\end{aligned}$$
 
 ### 凸优化问题
 - 可以寻求凸优化
