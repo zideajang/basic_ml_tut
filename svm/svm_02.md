@@ -124,6 +124,20 @@ $$ \begin{cases}
     \frac{\partial L}{\partial b} = 0 \Rightarrow \sum_{i=1}^n \alpha_i y_i = 0
 \end{cases} $$
 
+### 对偶问题
+SVM 出了名的难于理解，我们把第一个式子带入拉格朗日方程就得到
+$$ max_{\alpha} \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j = 1}^n \alpha_i \alpha_j y_i y_j x_i^T x_j$$
+$$s.t. \begin{cases}
+    \alpha_i \ge 0 & i = 1,\dots , n \\
+    \sum_{i=1}^n \alpha_i y_i = 0
+\end{cases}$$
+- 对偶函数中未知变量少了很多，只剩下拉格朗日乘子
+- 形式比较对称和简洁
+- 不过现在比起之前的拉格朗日函数多了约束
+
+我们现在可以思考一些，其实只有在支持向量的点的$\alpha$才是非 0 的。其他不是支持向量点的$\alpha$ 全部是 0。
+### 松弛变量和惩罚函数
+
 
 在许多书都有凸函数和凹函数来进行，所以有关凸函数和凹函数有必要给大家分享
 - 凸函数
