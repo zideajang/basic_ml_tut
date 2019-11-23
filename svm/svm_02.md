@@ -116,6 +116,14 @@ $$\begin{aligned}
     s.t. & y_i(w \cdot x_i + b) \ge 1, & i =1,2, \cdots , N 
 \end{aligned}$$
 
+### 拉格朗日
+$$ L(w,b,\alpha) = \frac{1}{2} ||w||^2 - \sum_{i=1}^n \alpha_i (y_i(W^T\alpha x_i + b)-1) $$
+
+$$ \begin{cases}
+    \frac{\partial L}{\partial w} = 0 \Rightarrow w = \sum_{i=1}^n \alpha^i y_i x_i \\
+    \frac{\partial L}{\partial b} = 0 \Rightarrow \sum_{i=1}^n \alpha_i y_i = 0
+\end{cases} $$
+
 
 在许多书都有凸函数和凹函数来进行，所以有关凸函数和凹函数有必要给大家分享
 - 凸函数
