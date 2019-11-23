@@ -1,9 +1,10 @@
 # coding=utf-8
 import numpy as np
-<<<<<<< HEAD
 import plotly.graph_objs as go
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from IPython.display import Image 
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 # from plotly.offline import donwload
 
 # 定义参数
@@ -22,9 +23,8 @@ data = [go.Surface(z=y_hat)]
 layout = go.Layout(title="Linear regression")
 fig = go.Figure(data=data, layout=layout)
 iplot(fig)
-=======
-import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+
+
 
 def func(x, a, b, c):
     return a * np.exp(-b * x) + c
@@ -40,4 +40,3 @@ plt.plot(x, yn, 'ko', label="Original Noised Data")
 plt.plot(x, func(x, *popt), 'r-', label="Fitted Curve")
 plt.legend()
 plt.show()
->>>>>>> 745db95d4c1f57a0dce91f68928cacc4011d2abd
