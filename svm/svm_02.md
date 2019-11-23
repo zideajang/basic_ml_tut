@@ -138,7 +138,7 @@ $$s.t. \begin{cases}
 我们现在可以思考一些，其实只有在支持向量的点的$\alpha$才是非 0 的。其他不是支持向量点的$\alpha$ 全部是 0。
 ### 松弛变量和惩罚函数
 
-
+![event-classification-prediction-using-support-vector-machine-15-638.jpg](https://upload-images.jianshu.io/upload_images/8207483-77c5ca0a9096cc56.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 在许多书都有凸函数和凹函数来进行，所以有关凸函数和凹函数有必要给大家分享
 - 凸函数
 $$ \theta x_1 + (1 - \theta) x_2  $$
