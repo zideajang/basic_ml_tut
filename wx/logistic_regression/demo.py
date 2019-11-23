@@ -7,36 +7,25 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 # from plotly.offline import donwload
 
-# 定义参数
-theta_1 = 3
-theta_2 = 2
-bias = 0.8
-# 获取网格
-x_1 = y_1 = np.arange(-5, 5, 0.1)
-x_1, y_1 = np.meshgrid(x_1, y_1)
-# 进行二元线性回归模型计算
-y_hat = \
-(theta_1 * np.ravel(x_1) + 
- theta_2 * np.ravel(y_1) + bias).reshape(x_1.shape)
+def draw_binary_linear_equation():
+    # 定义参数
+    theta_1 = 3
+    theta_2 = 2
+    bias = 0.8
+    # 获取网格
+    x_1 = y_1 = np.arange(-5, 5, 0.1)
+    x_1, y_1 = np.meshgrid(x_1, y_1)
+    # 进行二元线性回归模型计算
+    y_hat = \
+    (theta_1 * np.ravel(x_1) + 
+    theta_2 * np.ravel(y_1) + bias).reshape(x_1.shape)
 
-data = [go.Surface(z=y_hat)]
-layout = go.Layout(title="Linear regression")
-fig = go.Figure(data=data, layout=layout)
-iplot(fig)
+    data = [go.Surface(z=y_hat)]
+    layout = go.Layout(title="Linear regression")
+    fig = go.Figure(data=data, layout=layout)
+    iplot(fig)
 
-
-
-def func(x, a, b, c):
-    return a * np.exp(-b * x) + c
-
-x = np.linspace(0,4,50)
-y = func(x, 2.5, 1.3, 0.5)
-yn = y + 0.2*np.random.normal(size=len(x))
-
-popt, pcov = curve_fit(func, x, yn)
-
-plt.figure()
-plt.plot(x, yn, 'ko', label="Original Noised Data")
-plt.plot(x, func(x, *popt), 'r-', label="Fitted Curve")
-plt.legend()
-plt.show()
+if __name__ == "__main__":
+    draw_binary_linear_equation()
+    plt.show()
+    
