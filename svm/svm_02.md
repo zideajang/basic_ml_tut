@@ -139,6 +139,25 @@ $$s.t. \begin{cases}
 ### 松弛变量和惩罚函数
 
 ![event-classification-prediction-using-support-vector-machine-15-638.jpg](https://upload-images.jianshu.io/upload_images/8207483-77c5ca0a9096cc56.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+在图中一个红色点没有落在下面支持平面下方他所属类别的位置而是落在表示了另一个类别的区域。我们将这样数据称为线性不可分。其实真实实例中也是很难遇到线性可分，那么我们就将 SVM 进行调整让其也可以解决线性不可分的问题。
+
+解决问题就是让这些分错点尽量少，而且尽量解决决策边界，通过两个尽量就解决了这个问题。同时也增加模型的复杂度。
+我们可以通过松弛变量法，也就是在约束条件时减去一个比较小的数。
+$$ y_i(w^T x_i + b) \ge 1 - \epsilon_i , \epsilon_i \ge 0$$
+那么这里epsilion 是如何定义，他有表示什么几何意义，表示将我们两侧支撑平面沿着决策平面法线方向平移一段距离，移动多少是有分错点距离支撑平面距离决定，那么也就是分错点距离平面距离越大epsilion 就越大。但是约束条件并没有反应出这些分错的点要尽量接近决策平面。
+$$ \min \frac{1}{2} ||w||^2 + C \sum_{i=1}^R \epsilon_i $$
+- C 是常数项表示我们对惩罚项$C \sum_{i=1}^R \epsilon_i$ 重视程度
+- 当 C 很大的时候，分错误点就会更少，但是可能会出现过拟合
+- 相反 C 很小时候，分错点可能会很多，就可能出现模型精度不够问题
+- 为了达到最小值，因为 C 是常数，epsilion 又是大于等于 0，所以我们需要尽量让 epsilion 越小越好。
+
+$$ max_{\alpha} \sum_{i=1}^n \alpha_i - \frac{1}{2} \sum_{i,j = 1}^n \alpha_i \alpha_j y_i y_j x_i^T x_j$$
+$$s.t. \begin{cases}
+    C \ge \alpha_i \ge 0 & i = 1,\dots , n \\
+    \sum_{i=1}^n \alpha_i y_i = 0
+\end{cases}$$
+
 在许多书都有凸函数和凹函数来进行，所以有关凸函数和凹函数有必要给大家分享
 - 凸函数
 $$ \theta x_1 + (1 - \theta) x_2  $$
