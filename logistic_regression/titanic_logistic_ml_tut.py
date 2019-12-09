@@ -56,7 +56,7 @@ def decision_tree_model():
     decision_tree_ = decision_tree.fit(features,target)
 
     # 看到这个结果可能会联想到过拟合
-    # print decision_tree_.score(features,target) #0.9797979797979798
+    print decision_tree_.score(features,target) #0.9797979797979798
     scores = model_selection.cross_val_score(decision_tree,features,target,scoring='accuracy',cv=50)
     # print scores
     print scores.mean() #0.7848856209150326
@@ -76,7 +76,6 @@ def generalized_tree_model():
     features = train[feature_names].values
 
     # 看到这个结果可能会联想到过拟合
-    # print decision_tree_.score(features,target) #0.9797979797979798
     # print scores
 
     generalized_tree = tree.DecisionTreeClassifier(random_state=1,max_depth=7,min_samples_split=2)
@@ -86,8 +85,10 @@ def generalized_tree_model():
 
     tree.export_graphviz(generalized_tree_,feature_names=feature_names,out_file="tree.dot")
 
+    print decision_tree_.score(features,target) #0.9797979797979798
 
 def run():
+    # generalized_tree_model()
     generalized_tree_model()
 
 if __name__ == "__main__":

@@ -129,29 +129,52 @@ $$ F1值 = \frac{0.7 \times 1 \times 2}{0.7 + 1} = 82.35 \% $$
 $$ F_{\beta} = (1 + \beta^2) \dot \frac{准确率 \times 召回率}{(\beta^2 \times 准确率 ) + 召回率} $$
 
 
-有关线
+
 ### 泰坦尼克生与死
-在开始之前我们先哀悼那些在这次海难中遇难的人们。
-### 引入依赖
+在开始内容之前，让我们先哀悼一下那些在这次海难中遇难的人们。1912 年 4 月 15 日，在泰坦尼克号首航，与冰山相撞后沉没，共 2224 名乘客和船员中 1502 人在这次沉船事件丧生。
+通过机器学习分析什么样人生存概率。
+
+#### 应用
+现在可以大家已经掌握一些机器学习算法，现在可以通过做一个机器学习示例，综合之前学习过知识来解决一些实际问题。
+- 数值归一化
+- 回归预测
+
+#### 引入依赖
 ```python
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 ```
-这里我们使用 pandas 的一个 python 数据库，pandas 好处就是可以将数据进行类似表格格式格式化。
+这里我们使用 pandas ，pandas 是一个可以表格形式操作数据和展示数据的 python 常用库，pandas 好处就是可以将数据进行类似表格格式格式化。numpy 是对矩阵和向量操作比较方便的 python 库，其对矩阵数据结构的操作在速度上要优于 python 自带的方法和工具集。 
 
 ### 准备数据
 ```python
 train = pd.read_csv('./data/train.csv')
 print train.head()
 ```
-读取训练数据集，我们打印每一个列数据量，可以查看出某些列数据并不完整，carbin 只有在 204 条记录中有值。
+| 特征名  | 说明  |
+|---|---|
+| survived  | 幸存者 1 表示生还 0 表示遇难   |
+| pclass  | 客舱等级 1,2,3   |
+| name  | 乘客姓名   |
+| sex  | 性别   |
+| age  | 年龄   |
+| sibsp  | 兄弟姐妹/配偶数量   |
+| parch  | 父母/孩子的数量   |
+| ticket  | 船票号码   |
+| fare  | 票价   |
+| cabin  | 客舱   |
+| embarked  | 登船的港口 C 表示瑟堡 Q皇后镇 S南安普顿   |
+
+
+读取训练数据集，样本数量为 891 ，我们打印出每一个列的数据量，可以查看出某些列数据并不完整，carbin 只有在 204 条记录中有值。
 ```
 print train.count()
 ```
+
 ```
-survived    891
+survived    891 
 pclass      891
 name        891
 sex         891
@@ -163,8 +186,11 @@ fare        891
 cabin       204
 embarked    889
 ```
+当然我们还可以提供 info 方法来检查数据更详细的信息。
 
-![titanic_missing_data.png](https://upload-images.jianshu.io/upload_images/8207483-d6ed3fc216ffafed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+```python
+data_train.info()
+```
 
 ```
 <class 'pandas.core.frame.DataFrame'>
@@ -185,26 +211,6 @@ dtypes: float64(2), int64(4), object(5)
 memory usage: 76.6+ KB
 ```
 总共有可以看到 891 条记录，中间某些列中可能有一些空值，稍后将对其进行处理。
-
-### 检查数据的丢失
-使用 seaborn 来创建一个热力图，来检查丢失数据位置
-```
-sns.heatmap(train.isnull(),yticklabels=False,cbar=False,cmap='viridis')
-plt.show()
-```
-
-)
-
-![titanic_missing_data.png](https://upload-images.jianshu.io/upload_images/8207483-d6ed3fc216ffafed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-从热力图上来看，大约 20% 年龄数据丢失，在机舱(carbin)列丢失数据过多在清洗数据会将其删除。
-
-
-![titanic_survived_bar.png](https://upload-images.jianshu.io/upload_images/8207483-6e91c3fb9115b156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-通过上面直方图可以看出遇难者(用 0 表示遇难)为 60% 而幸存者(用 1 表示)占到 40%
-
-我们
 
 ```python
 df.survived.value_counts(normalize=True).plot(kind="bar",alpha=0.5)
@@ -242,16 +248,116 @@ sns.countplot(x='survived', hue='sex', data=train, palette='RdBu_r')
 #### 查看幸存者乘客等级
 ![幸存者旅客等级](https://upload-images.jianshu.io/upload_images/8207483-286d81b59f9066b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-从图中我们可以看出在遇难者中处于等级 3 (也就是最低等级) 游客比例比较大。
+从图中，不难看出在遇难者中处于等级 3 (也就是最低等级) 游客比例比较大。因为这部分乘客年龄偏于年轻。
 
 #### 查看乘客年龄分布
 
 ![乘客年龄分布](https://upload-images.jianshu.io/upload_images/8207483-d428350c4a145944.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-年龄集中在 20 到 30 之间，
+年龄集中在 20 到 30 之间，说明
 
 #### 查看乘客中兄弟姐妹配偶
 ![兄弟姐妹配偶](https://upload-images.jianshu.io/upload_images/8207483-b4f8372e9b184c21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+### 检查数据的丢失
+使用 seaborn 来创建一个热力图，来检查丢失数据位置，这样通过图表查看感觉更加直观。
+```
+sns.heatmap(train.isnull(),yticklabels=False,cbar=False,cmap='viridis')
+plt.show()
+```
+
+)
+
+![titanic_missing_data.png](https://upload-images.jianshu.io/upload_images/8207483-d6ed3fc216ffafed.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+从热力图上来看，大约 20% 年龄数据丢失，在机舱(carbin)列丢失数据过多在清洗数据会将其删除。
+
+
+![titanic_survived_bar.png](https://upload-images.jianshu.io/upload_images/8207483-6e91c3fb9115b156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+通过上面直方图可以看出遇难者(用 0 表示遇难)为 60% 而幸存者(用 1 表示)占到 40%
+
+#### 观察数据的特征
+我们查看一下生存预测的数据标签，特征 passengerId, Ticket 和 Name 维度下的数据基本完全随机，所以不再特征值考虑范围内。剩下的特征可以分为数值意义的特征和类别意义的特征
+- 数值 age sibsp parch
+- 类别: pclass sex embarked cabin
+#### 处理缺失的数据
+这里因为我们数据样本比较珍贵，只有 891 ，所以不能使舍去丢失 age 数据的样本，而是需要我们填充数据来尽量还原，如何还原这些样本 age 数据，其实这也是一个预测问题，我们暂时用均值来代替随后，我们通过回归预测模型来预测年龄数据。
+
+```python
+def set_missing_ages(p_df):
+    p_df.loc[(p_df.age.isnull(),'age')] = p_df.age.dropna().mean()
+    return p_df
+```
+
+#### 归一化数值数据
+对于两类特征数据混乱问题，有的时候我们不希望任意个特征对模型影响较大，因为特征所取值较大，那么在计算损失函数时候就会影响比较大，所以我们需要归一化来处理这样问题，让每一个特征对模型影响都是相同，这一点我想大家都能理解。数据归一化。
+
+#### 处理类别意义的特征
+在数据样本中 cabin 数据缺失还是比较严重，所以我们可以将这个问题简化为有没有的问题，也就是同 Yes 和 No 来取代之前数值
+```python
+def set_cabin_type(p_df):
+    p_df.loc[(p_df.cabin.notnull()),'cabin'] = "Yes"
+    p_df.loc[(p_df.cabin.isnull()),'cabin'] = "No"
+    return p_df
+```
+在决策树学习和逻辑回归时候已经学习到用热编码(one-hot)来表示类别，其实类别表示问题上数值并不是恰当能够反映类别，我们需要通过热编码来表示类别。
+
+```
+   pclass_1  pclass_2  pclass_3
+0         0         0         1
+1         1         0         0
+2         0         0         1
+```
+
+### 构造非线性特征
+所谓线性模型就是把特征对分类结果的作用加起来，也就是线性模型能表示类似于 $y= x_1 + x_2$ 关系的表达式，其中 y 表示分类结果，$x_1,x_2$ 表示特征对分类作用。所以线性模型无法表达非线性关系，不过我们可以通过添加一些新的具有非线性的特征来弥补线性模型表现力不足的问题。
+特征非线性分类两类
+- 用于表达**数值特征**本身的非线性因素
+- 用于表达特征与特征之间存在非线性关联，
+
+也就是利用现有特征来创建一些更有表达力的特征
+
+#### 评估特征作用
+#### 构造特征的数学意义
+上面我们通过很多技巧人工地构造一些非线性特征，可以弥补非线性模型表达不足。那么这些非线性特征是如何弥补线性模型不足的呢?我们现在就来回答这个问题。先给出答案然后再做解释，答案就是**低纬的非线性关系可以在高维空间上展开**。有时候我们数据一个低纬空间是不可分，当我们为通过增加特性来提高维度，他可能就是可分的。但是并不是代表特征越多越好，特征多了就容易出现过拟合，我们新建维度可以清楚将每一个训练集中数据样特征记住区分，那么对于新增样本（测试数据集）模型就变得束手无策了。
+这是因为我们数据是有噪音，这些噪音对模型预测是没有帮助的，记住这噪音势必会影响模型泛化能力。
+
+
+### 选择模型
+在设计模型需要考虑两个问题就是**过拟合**和**欠拟合**的问题，他们都是由于模型复杂度不适当所带来问题。
+#### 过拟合
+我们可以在损失函数正价正则化来解决过拟合问题，也可以通过增加数据量或简化模型来解决过拟合问题。其实正则化问题也就是SVM中拉格朗日函数函数，作为对损失函数一种约束，确保损失函数与
+#### 欠拟合
+也就是我们模型设计过于简单，也就是模型能力不足。大家应该注意所谓**过拟合**和**欠拟合**,都是需要我们重新
+### 模型调试
+
+
+### 分类模型评估指标
+评估模型，也就是合理定义评估指标，只有好的评估才能对模型的选择、调试有指导意义。这句话延伸就不做过多解释
+
+
+## 回归模型
+
+## 决策树模型
+## 模型融合
+我们都是知道“三个臭皮匠，顶一个诸葛亮”，有时候我们模型(例如决策树分类器)能力比较弱，我们需要将多个弱分类器组合起来完成一个任务。我们可以让多个个性差异的模型形成模型群体，共同发挥作用，从而获取更好的表现成绩，这就是模型融合(Ensamble)。好处是消除个性化，降低因个性差异带来错误。
+在决策树我们通过极度丰富的特征和极深的树来构造出一颗在训练集上接近满分的决策树，但是容易发现这是过拟合的模型。在随机森林中我们模型是通过随机数据样本和随机选择特征来达到创建不同(个性)模型的目的的。
+### 随机森林(Bagging)
+Bagging 应用于同类型的模型个体，使其形成模型群体。通过有放回随机抽取全体数据中部分样本来训练出有差异的个体模型，然后将这些个体模型组合成模型群体来实现融合模型。Badding 随机性不但包括样本选择随机性，而且在个体模型中节点的特性也是随机选取来达到个体差异性。
+
+### Boosting(GBDT)
+在 Bagging 中模型样本和特征随机选取可能具有盲目性，也就是前面训练模型并没有影响到后序模型训练，模型之间训练相对独立。而在 Boosting 训练是有时序性的，也就是后序模型是在前面模型的训练成果继续训练的，后续模型会尝试修正前面模型的错误。主要两种分别是**Ada-Boosting**和**Gradient-Boosting**。
+
+#### Ada-Boosting
+在Ada-Boosting 训练方式是，后续模型更关注之前的错误样本，具有一定针对性训练。
+- 为整个数据集每一个样本分配权重$s_1,s_2,\dots , s_m$来表示模型更关心那些样本
+- 归一化序列$[acc_1,acc_2,\dots,acc_n]$
+#### Gradient-Boosting
+这种融合模型执行比较简洁，但数学推导以及实现相对要复杂些，可以用于概率分类和回归问题。方式是后续模型不再直接预测数据集的预测值，而是预测之前模型的预测值和真实值的差值。
+- 训练模型$M_1$ 得到预测值后 $ yPred = yPred_1$
+- - 下一个模型$M_2$将预测值为$dy_1 = yPred_1 - y$ 作为训练的目标，所以总体模型预测值 $yPred = yPred_1 + yPpred_2$
+
 
 #### 查看票价分布
 
