@@ -20,6 +20,3 @@ $$var(X) = E[X - E(X)]^2$$
 $$ \sqrt{\frac{1}{N}\sum_{i=1}^N(x_i - x)^2}$$
 
 
-
-
-<script src="https://g.517cdn.com/Jquery.Plugin/misapp/mgnative-1.0.0.js"></script>
