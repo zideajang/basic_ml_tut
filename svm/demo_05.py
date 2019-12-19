@@ -45,8 +45,15 @@ def draw_equation_two():
     plt.grid()
     plt.show()
 
+def graph(formula, x_range):  
+    x = np.array(x_range)  
+    y = eval(formula)
+    plt.plot(x, y)
+    plt.grid()
+    plt.show()
+
 def main():
     draw_equation_two()
 if __name__ == '__main__':
-    main()
+    graph('x*3+2*x', range(-10, 11))
     
