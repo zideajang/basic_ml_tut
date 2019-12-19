@@ -18,8 +18,9 @@ $$\frac{1}{N} \sum_{i=1}^N(x_i - x)^2$$
 $$var(X) = E[X - E(X)]^2$$
 - 标准差：是方差开平方根
 $$ \sqrt{\frac{1}{N}\sum_{i=1}^N(x_i - x)^2}$$
+- 协方差
+协有协同的意思，
+
+$$cov(X_i,X_j) = E[(X_i - E[X_i])(X_j - E[X_j])] $$
 
 
-
-
-<script src="https://g.517cdn.com/Jquery.Plugin/misapp/mgnative-1.0.0.js"></script>
