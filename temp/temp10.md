@@ -38,14 +38,29 @@ $$ \int e^{-x} dx = e^{-x}  $$
 $$ \int_0^{\infty} x^{t} e^{-x} dx$$
 $$ \int_0^{\infty} t^{x} e^{-t} dt = x!$$
 
-$$$$
+$$\Gamma(x) = (x-1)\Gamma(x-1) \Rightarrow \frac{\Gamma(x)}{\Gamma(x-1)} = x-1$$
 
 $$\Gamma(x) = \int_0^{\infty} t^{x-1}e^{-t}dt = (x-1)!$$
-伽马函数主要就是阶乘的连续性。
-$$ x^2(1-x)^3 x \in [0,1] $$
-这个函数知道在 0 到 1 之间，所以$x \ge 0$ x 等于 0 或者 x = 1 时候是 0 如图，那么如果
 
-$$ \int_0^1 x^2(1-x)^3 dx $$ 就是这个曲线和坐标围成的面积那么将，
+#### Beta 分布
+
+$$ x^2(1-x)^3 x \in [0,1] $$
+这个函数知道在 0 到 1 之间，所以$x \ge 0$ x 等于 0 或者 x = 1 时候是 0 如图，我们画出一个图像，
+
+
+就是这个曲线和坐标围成的面积那么将，可以用积分进行
+$$ S =  \int_0^1 x^2(1-x)^3 dx $$ 
+$$  $$
+S 是根据系数 2 和 3 有关系的，我们用函数除以面积就可以得到概率密度函数
+
+$$ S(2,3) = \frac{1}{S}  x^2(1-x)^3  $$
+
+$$ f(x) = \begin{cases}
+    \frac{1}{B(\alpha,\beta) }x^{\alpha-1}(1-x)^{\beta-1} & x \in [0,1] \\
+    0 & otherwise
+\end{cases}$$
+
+$$B(\alpha,\beta) = \int_0^1 x^{\alpha-1}(1-x)^{\beta-1} dx = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$
 
 $$Beta(\alpha,\beta) = \frac{\Gamma(\alpha + \alpha)}{\Gamma(\alpha)\Gamma(\beta)} p^{(\alpha - 1)}(1 - p)^{(\beta - 1)}$$
 
