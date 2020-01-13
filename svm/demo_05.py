@@ -55,5 +55,6 @@ def graph(formula, x_range):
 def main():
     draw_equation_two()
 if __name__ == '__main__':
-    graph('x*3+2*x', range(-10, 11))
+    # graph('x*3+2*x', range(-10, 11))
+    main()
     

@@ -446,3 +446,86 @@ $$ w^* = \arg \min $$
 为什么需要线性回归，我们先复习一下线性回归最小二乘法
 $$ J(\theta) = \frac{1}{2m}[\sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j=1}^n \theta_j^2] $$
 $$ J(\theta) = \frac{1}{2m}[\sum_{i=1}^m(h_{\theta}(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j=1}^n |\theta_j|] $$
+
+
+
+我们知道 tensorflow 是机器学习主流框架，这一点我们从机器学习岗位招聘要求就可以了解到 tensorflow 的重要。在 tensorflow 框架基础上有更高级的 keras 等框架。
+
+我们之前使用决策树解决过这个分类问题，今天我们继续用 tensorflow 来解决问题，这个代码是从 kaggle 上借鉴过来。我们可以一起一边读一边了解作者是如何解决这个问题。
+
+我们首先来构建图
+```python
+inputs = tf.placeholder(tf.float32, shape=[None, train_x.shape[1]])
+labels = tf.placeholder(tf.float32, shape=[None, 1])
+```
+
+我们要做几件事
+- 初始化变量
+- 定义神经网络
+- 定义目标函数(损失函数)
+- 优化损失函数找到最优参数，也就是找到
+#### 初始化变量
+```python
+inputs = tf.placeholder(tf.float32, shape=[None, train_x.shape[1]])
+labels = tf.placeholder(tf.float32, shape=[None, 1])
+learning_rate = tf.placeholder(tf.float32)
+```
+输入[None,特征值个数]的向量，这里因为输入样本数量不确定，所以使用 None。
+输出为[None,1] 的一列矩阵，最后定义一下学习率。
+#### 定义神经网络
+```python
+initializer = tf.contrib.layers.xavier_initializer()
+fc = tf.layers.dense(inputs, hidden_units, activation=None,kernel_initializer=initializer)
+fc=tf.layers.batch_normalization(fc, training=is_training)
+fc=tf.nn.relu(fc)
+ logits = tf.layers.dense(fc, 1, activation=None)
+```
+先定义一个全连接层，输入为 inputs 输出为 hidden_units 个节点
+激活函数 relu，这个激活函数大多数神经网络层激活函数，而不是 sigmoid 的激活函数。
+#### 定义目标函数(损失函数)
+```python
+cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=labels, logits=logits)
+cost = tf.reduce_mean(cross_entropy)
+```
+这里使用sigmod的交叉熵作为损失函数
+
+
+```python
+    predicted = tf.nn.sigmoid(logits)
+    correct_pred = tf.equal(tf.round(predicted), labels)
+    accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
+```
+使用逻辑回归来进行分类，分类结果 predicted 和 labels 进行对比来进行
+
+```python
+export_nodes = ['inputs', 'labels', 'learning_rate','is_training', 'logits',
+                    'cost', 'optimizer', 'predicted', 'accuracy']
+    Graph = namedtuple('Graph', export_nodes)
+    local_dict = locals()
+    graph = Graph(*[local_dict[each] for each in export_nodes])
+
+```
+
+```python
+epochs = 200
+train_collect = 50
+train_print=train_collect*2
+
+learning_rate_value = 0.001
+batch_size=16
+```
+上边的参数如果学习过 tensorflow 应该不会陌生，epochs 表示训练的次数，batch_size 表示每一个训练批次样本数量，learning_rate_value 表示学习率。
+
+```
+with tf.Session() as sess:
+```
+设计好的计算图都需要放到 tf.Session() 进行计算
+```
+sess.run(tf.global_variables_initializer())
+```
+
+```python
+saver = tf.train.Saver()
+saver.save(sess, "./titanic.ckpt")
+```
+将训练模型参数保存起来

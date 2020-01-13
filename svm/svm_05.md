@@ -288,3 +288,95 @@ $$-1 +  w^TW \lambda  = 1$$
 $$ w^TW \lambda  = 2$$
 $$ \lambda = \frac{2}{||w||}$$
 
+$$ \begin{cases}
+    \frac{\partial L}{\partial \vec{x}} = 0 \\
+\end{cases} $$
+
+$$L(x,\mu,\lambda) = f(x) = \sum_{i=1}^l$$
+
+$$\begin{cases}
+\min_{x} x^2 \\
+s.t. & x \ge b & (b - x \le 0)
+\end{cases}$$
+
+$$L(x, \lambda) = \underbrace{x^2}_{f(x)} + \lambda \underbrace{(b - x)}_{g(x)}$$
+
+$$ \frac{\partial L}{\partial x} = 2x - \lambda = 0 \Rightarrow x^{*} = \frac{\lambda}{2}$$
+
+$$\frac{\partial L}{\partial \lambda} = b - x = 0 \Rightarrow x = b \Rightarrow \frac{\lambda}{2} = b \Rightarrow \lambda^{*} = 2b $$
+
+$$\lambda^{*} = \max(0,2b)$$
+有两种情况如果全局最优解在约束条件内也就是$\lambda = 0$,最优解不在约束条件内外，那么$\lambda$ 就是一个不等于 0 的数时候就可以计算$\lambda = 2b$ 
+$$x^{*} = \begin{cases}
+    0 \\
+    b
+\end{cases}$$
+
+比如说我们需要对于直线方程描述，高维空间有许多点，我们同时满足学多条件的
+$$ \theta^T x + b  = 0 $$
+$$ \theta^T x + b  < 0 $$
+$$ \theta^T x + b  > 0 $$
+分成完整连个部分，不过有很多种可能都可以将数据进行分离，不过我们需要找到一个完美的超平面将这些点进行分离。给定 $$ \theta^T x^{(i)} + b  > 0 y^{(i)} = 1 $$ 
+
+我们可以构造
+
+ $$ y^{(i)} (\theta^T x^{(i)} + b)  > 0 $$ 
+ $$ y^{(i)} (\theta^T x^{(i)} + b)  < 0 $$
+ 我们给定线性
+ $$y = 2x + 3$$
+我们这里用向量形式来表示方程
+ $$(2,1) \left( \begin{matrix}
+     x \\
+     y
+ \end{matrix} \right) + 3  = 0$$ 
+
+ 这里是$\theta^T$ 表示转置也就是直线垂直的一条向量。代表线性函数的法线方向也就是和这条直线垂直的方向。
+
+
+
+
+
+
+
+### 线性模型
+$$\begin{aligned}
+    w \cdot x - b = 0 \\
+    w \cdot x_i - b \ge 0 & if \, y_i =1 \\
+    w \cdot x_i - b \le 0 & if \, y_i = -1\\
+    y_i (w \cdot x_i - b) \ge 0 \\
+\end{aligned}$$
+
+### 损失函数（Hinge Loss)
+$$ l = \max(0,1-y_i(w \cdot x_i - b)) $$
+
+$$l = \begin{cases}
+    0 & if \, y\cdot f(x) \ge 1 \\
+    1 - y \cdot f(x) & otherwise
+\end{cases}$$
+
+### 添加限制条件
+$$ J = \lambda ||w||^2 + \frac{1}{n} \sum_{i=1}^n \max(0,1-y_i(w \cdot x_i -b ))$$
+
+#### 第一种情况
+$$if y_i \cdot f(x) \ge 1$$
+$$ J_i = \lambda ||w||^2$$
+#### 第二种情况
+$$ J = \lambda ||w||^2 + 1 - y_i(w \cdot x_i - b)$$
+
+### 梯度
+#### 第一种情况
+$$ if \, y_i f(x) \ge 1 $$
+
+$$\begin{cases}
+    \frac{d J_i}{d w_k} = 2 \lambda w_k \\
+    \frac{d J_i}{ d b} = 0
+\end{cases}$$
+#### 第二种情况
+$$\begin{cases}
+    \frac{d J_i}{d w_k} = 2 \lambda w_k - y_i \cdot x_i\\
+    \frac{d J_i}{ d b} = y_i
+\end{cases}$$
+
+
+### 更新规则
+$$ w = w - \alpha $$
