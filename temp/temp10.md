@@ -22,13 +22,30 @@ $$D(k|n,p) = \left( \begin{matrix}
 \end{matrix} \right) p^k (1-p)^(n-k)$$
 我们知道多次的 0 1 分布就是伯努利分布，这里 n 表示进行试验次数(也就是投掷硬币次数)而 k 表示我们期望事件出现次数(在投硬币试验中就是硬币正面朝上的次数) p 表示正面朝上的概率.
 
-数据(似然)很好理解，但是对于先验分布，如何获得数据先验，通常我们会给出机会均等作为先验。因为希望这个先验分布和数据(似然)对应的二项分布集合后，得到的后验分布在后面还可以作为先验分布！就像上面例子里的“102个好人和101个的坏人”，它是前面一次贝叶斯推荐的后验分布，又是后一次贝叶斯推荐的先验分布。也即是说，我们希望先验分布和后验分布的形式应该是一样的，这样的分布我们一般叫共轭分布。在我们的例子里，我们希望找到和二项分布共轭的分布。
-
-在这里说题外话，也是个人学习机器学习的一种方法，如果一个知识点对于你可能理解上有点困难，这时候我们就需要先混个脸熟，这个和追女孩是一样的。首先要经常见面。
-
 
 #### 共轭先验
 共轭先验(conjugate priors)是一种概率密度，使得后验概率的密度函数和先验概率的密度函数有着相同的函数形式。
+
+数据(似然)很好理解，但是对于先验分布，如何获得数据先验，通常我们会给出机会均等作为先验。因为希望这个先验分布和数据(似然)对应的二项分布集合后，得到的后验分布在后面还可以作为先验分布！是前面一次贝叶斯推荐的后验分布，又是后一次贝叶斯推荐的先验分布。也即是说，我们希望先验分布和后验分布的形式应该是一样的，这样的分布我们一般叫共轭分布。在我们的例子里，我们希望找到和二项分布共轭的分布。
+
+在这里说题外话，也是个人学习机器学习的一种方法，如果一个知识点对于你可能理解上有点困难，这时候我们就需要先混个脸熟，这个和追女孩是一样的。首先要经常见面。
+
+#### 伽马函数
+
+我们对一些典型函数求积分我想大家可能非常熟悉
+$$ \int x^t dx = \frac{x^{t+1}}{t+1}$$
+$$ \int e^{-x} dx = e^{-x}  $$
+$$ \int_0^{\infty} x^{t} e^{-x} dx$$
+$$ \int_0^{\infty} t^{x} e^{-t} dt = x!$$
+
+$$$$
+
+$$\Gamma(x) = \int_0^{\infty} t^{x-1}e^{-t}dt = (x-1)!$$
+伽马函数主要就是阶乘的连续性。
+$$ x^2(1-x)^3 x \in [0,1] $$
+这个函数知道在 0 到 1 之间，所以$x \ge 0$ x 等于 0 或者 x = 1 时候是 0 如图，那么如果
+
+$$ \int_0^1 x^2(1-x)^3 dx $$ 就是这个曲线和坐标围成的面积那么将，
 
 $$Beta(\alpha,\beta) = \frac{\Gamma(\alpha + \alpha)}{\Gamma(\alpha)\Gamma(\beta)} p^{(\alpha - 1)}(1 - p)^{(\beta - 1)}$$
 
@@ -72,6 +89,8 @@ $$Beta(p|\alpha,\beta) + BinomCount(k,n-k) = Beta(p|\alpha + k,\beta + n -k)$$
 
 LDA假设文档主题的先验分布是Dirichlet分布，即对于任一文档 [公式] ，其主题分布 [公式] 为
 
+
+
 $$\begin{cases}
     f(x) = x^2 \\
     s.t. & x \ge b \Rightarrow x-b \ge 0
@@ -81,16 +100,26 @@ $$L(x,\lambda) = x^2 - \lambda (x-b)$$
 
 $$\begin{cases}
     \frac{\partial L}{\partial x} = 2x - \lambda = 0 \Rightarrow x = \frac{\lambda}{2}\\
-    \frac{\partial L}{\partial \lambda} = 
+    \frac{\partial L}{\partial \lambda} = b - x = 0 \Rightarrow x = b \Rightarrow \frac{\lambda}{2} = b \Rightarrow \lambda^{*} = 2b
 \end{cases}$$
 
+$$\lambda^{*} = \max(0,2b)$$
+$$\begin{cases}
+    x^{*} = 0 \\
+    x^{*} = b
+\end{cases}$$
+
+$$\begin{aligned}
+    \min_x \max_{\lambda} L(x,\lambda) = x^2 - \lambda(x-b)\\
+    \max_{\lambda} \min_x L(x,\lambda) = x^2 - \lambda(x-b)\\
+\end{aligned}$$
 
 $$\begin{cases}
     \max = \frac{1}{2}|| w||^2 \\
     s.t. & y^{(i)}(w x^{(i)} - b  ) \ge 1\\
 \end{cases}$$
 
-$$\min_{w,b} = \frac{1}{2} ||w||^2 + \sum_{i=1}^N \alpha_i [1 - y^{(i)}(w x^{i} + b)]  $$
+$$\min_{w,b} = \frac{1}{2} ||w||^2 + \sum_{i=1}^N \alpha_i [1 - y^{(i)}(w x^{(i)} + b)]  $$
 
 
 #### 特征向量和特征值
